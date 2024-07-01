@@ -1,0 +1,41 @@
+
+<ion-content [fullscreen]="true" class="ion-padding">
+  <ion-text color="dark">
+    <h1>Restaurant Manager App</h1>
+    <h4>Be a DropEat Partner</h4>
+  </ion-text>
+  <form [formGroup]="form" (ngSubmit)="login()" class="ion-padding">
+    <ion-input
+      type="number"
+      label="Enter Mobile Number"
+      label-placement="stacked"
+      fill="outline"
+      placeholder="Enter Mobile Number"
+      formControlName="phoneNumber"
+      helperText="Please enter 10 digit mobile number"
+      counter="true"
+     
+    ></ion-input>
+
+    <br />
+    <ion-item lines="none">
+      <ion-label>By Signing In I agree to Terms of use and Privacy Policy.</ion-label>
+      <ion-checkbox formControlName="isAgreed" slot="start"></ion-checkbox>
+    </ion-item>
+    <ion-button
+    [disabled]="form.invalid"
+      (click)="login()"
+      expand="full"
+      fill="solid"
+      shape="round"
+      mode="ios"
+    >
+      Send OTP
+    </ion-button>
+  </form>
+</ion-content>
+<ion-footer class="ion-no-border" routerLink="/register">
+  <ion-toolbar>
+    <ion-title class="ion-text-center">Not a Partner Yet? Register here.</ion-title>
+  </ion-toolbar>
+</ion-footer>

@@ -1,0 +1,48 @@
+<ion-header [translucent]="true" class="ion-no-border">
+  <ion-toolbar>
+    <ion-title class="ion-text-center">Orders</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" class="ion-padding">
+ <ion-segment value="0" (ionChange)="segmentChanged($event)" mode="ios">
+  <ion-segment-button value="0">
+    <ion-label>Received</ion-label>
+  </ion-segment-button>
+  <ion-segment-button value="1">
+    <ion-label>Prepared</ion-label>
+  </ion-segment-button>
+  <ion-segment-button value="4">
+    <ion-label>Cancelled Order</ion-label>
+  </ion-segment-button>
+ </ion-segment>
+
+ <ion-text color="primary" class="ion-text-center" *ngIf="orders.length == 0">
+  <h1>No Orders!</h1>
+ </ion-text>
+
+ <ion-list>
+  <ion-list-header>
+    <ion-label>All Orders here</ion-label>
+  </ion-list-header>
+
+  <ion-card *ngFor="let item of orders" (click)="presentActionSheet(item._id)">
+    <ion-card-header>
+      <ion-card-subtitle>Order By:- {{item.user.name}}</ion-card-subtitle>
+      <ion-card-title> Order ID: {{item.orderId}}</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <ion-item *ngFor="let p of item.productDetails">
+        <ion-avatar slot="start">
+          <img [src]="p.image_url" />
+        </ion-avatar>
+        <ion-label>{{p.name}}
+
+          <p> {{p.partnerPrice | currency:"INR"}} </p>
+        </ion-label>
+      </ion-item>
+    </ion-card-content>
+  </ion-card>
+
+</ion-list>
+</ion-content>

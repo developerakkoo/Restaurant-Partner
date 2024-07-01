@@ -1,0 +1,52 @@
+<ion-header [translucent]="true" class="ion-no-border">
+  <ion-toolbar>
+    <ion-title>Add Menu</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" class="ion-padding">
+  <form [formGroup]="form" (ngSubmit)="onSubmit()">
+    <ion-item>
+      <ion-label>Category</ion-label>
+      <ion-select formControlName="categoryId"  multiple="false" placeholder="Select here" interface="popover">
+        <ion-select-option *ngFor="let cat of categories" [value]="cat._id">{{cat.name}}</ion-select-option>
+      </ion-select>
+    </ion-item>
+
+    <br>
+
+    <ion-input formControlName="name" type="text" fill="outline" label="Menu Name" labelPlacement="stacked" placeholder="Menu Name"></ion-input>
+<br>
+<ion-item>
+  <ion-label>Dish Type</ion-label>
+  <ion-select formControlName="dishType" value="veg" multiple="false" placeholder="Veg/Non-Veg">
+    <ion-select-option value="veg">Veg</ion-select-option>
+    <ion-select-option value="non-veg">Non-veg</ion-select-option>
+  </ion-select>
+</ion-item>
+<br>
+      <ion-input formControlName="partnerPrice" type="text" fill="outline" label="Menu Price" labelPlacement="stacked" placeholder="Menu Price"></ion-input>
+<br>
+
+<ion-item>
+  <ion-label>In Stock</ion-label>
+  <ion-select formControlName="stock" value="1" multiple="false" placeholder="In Stock/ Out of Stock">
+    <ion-select-option value="1">Yes</ion-select-option>
+    <ion-select-option value="0">No</ion-select-option>
+  </ion-select>
+</ion-item>
+<br>
+<ion-item>
+  <ion-label>Spice Level</ion-label>
+  <ion-select formControlName="spicLevel" value="0" multiple="false" placeholder="Veg/Non-Veg">
+    <ion-select-option value="0">Mild</ion-select-option>
+    <ion-select-option value="1">Little Spicy</ion-select-option>
+    <ion-select-option value="2">Medium Spicy</ion-select-option>
+    <ion-select-option value="3">Very Spicy</ion-select-option>
+  </ion-select>
+</ion-item>
+    <ion-button block color="primary" type="submit" [disabled]="form.invalid">
+      Login
+    </ion-button>
+  </form>
+</ion-content>
