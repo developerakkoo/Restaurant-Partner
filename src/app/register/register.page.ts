@@ -46,10 +46,10 @@ export class RegisterPage implements OnInit {
       animated:true,
     
     })
-    await loading.present();
+    // await loading.present();
     if(this.form.valid){
       console.log(this.form.value);
-      this.auth.register(this.form.value.phoneNumber)
+      this.auth.register(this.form.value)
       .subscribe({
         next:async(value:any) =>{
           console.log(value);

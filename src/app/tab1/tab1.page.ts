@@ -4,6 +4,7 @@ import { LoadingController } from '@ionic/angular';
 import { AuthService } from '../services/auth.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import { DataService } from '../services/data.service';
+import { Socket } from 'ngx-socket-io';
 
 @Component({
   selector: 'app-tab1',
@@ -19,10 +20,13 @@ export class Tab1Page {
   hotelCount:any;
 
   constructor(private router: Router,
+    private socket: Socket,
     private auth:AuthService,
     private data: DataService,
               private loadingController: LoadingController,
-  ) {}
+  ) {
+    
+  }
 
   ionViewDidEnter(){
     this.checkForHotels();

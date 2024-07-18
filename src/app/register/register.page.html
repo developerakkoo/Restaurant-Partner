@@ -8,7 +8,7 @@
 </ion-header>
 
 <ion-content [fullscreen]="true" class="ion-padding">
-  <form [formGroup]="form" (ngSubmit)="register()">
+  <form [formGroup]="form">
     <ion-text
       color="dark"
       class="ion-text-center animate__animated animate__fadeIn"
@@ -16,6 +16,7 @@
       <h1 class="poppins-semibold">Sign up</h1>
     </ion-text>
     <br />
+    <img class="ion-text-center" src="assets/logo.svg" alt="" srcset="">
     <ion-input
       class="animate__animated animate__fadeIn"
       color="medium"
@@ -94,12 +95,7 @@
         ></ion-icon>
       </ion-button>
     </ion-input>
-    <ion-text
-      class="ion-text-right animate__animated animate__fadeIn"
-      color="primary"
-    >
-      <p class="no-margin">Forgot password?</p>
-    </ion-text>
+   
 
     <br />
 
@@ -107,7 +103,7 @@
       fill="clear"
       [disabled]="form.invalid"
       (click)="register()"
-      class="button-primary animate__animated animate__fadeIn"
+      class="button-primary"
     >
       Register
     </button>

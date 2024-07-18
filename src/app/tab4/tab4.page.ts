@@ -127,6 +127,7 @@ export class Tab4Page implements OnInit {
   }
 
   async presentActionSheet(orderId:any) {
+   if(this.status == 0){
     const actionSheet = await this.actionSheetController.create({
       header: 'Albums',
       buttons: [{
@@ -155,6 +156,44 @@ export class Tab4Page implements OnInit {
     });
   
     await actionSheet.present();
+   }
+   else  if(this.status == 4){
+    const actionSheet = await this.actionSheetController.create({
+      header: 'Albums',
+      buttons: [{
+        text: 'Handed over to Delivery Boy',
+        role: '',
+        icon: 'checkmark',
+        handler: () => {
+          console.log('Delete clicked');
+          this.handedToDeliveryBoy(orderId,6);
+        }
+      }, {
+        text: 'Cancel',
+        icon: 'close',
+        role: 'cancel',
+        handler: () => {
+          console.log('Cancel clicked');
+        }
+      }]
+    });
+  
+    await actionSheet.present();
+   }
+  }
+
+  handedToDeliveryBoy(orderId:any, status:any){
+    this.auth.updateOrderStatus(orderId, status)
+    .subscribe({
+      next:async(value:any) =>{
+        console.log(value);
+        this.getAllOrders();
+      },
+      error:async(error:HttpErrorResponse) =>{
+        console.log(error.error);
+        
+      }
+    })
   }
 
   getAllOrders(){

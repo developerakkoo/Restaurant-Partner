@@ -9,11 +9,11 @@
   <ion-segment-button value="0">
     <ion-label>Received</ion-label>
   </ion-segment-button>
-  <ion-segment-button value="1">
-    <ion-label>Prepared</ion-label>
-  </ion-segment-button>
   <ion-segment-button value="4">
-    <ion-label>Cancelled Order</ion-label>
+    <ion-label>Preparing</ion-label>
+  </ion-segment-button>
+  <ion-segment-button value="5">
+    <ion-label>Rejected Order</ion-label>
   </ion-segment-button>
  </ion-segment>
 
@@ -21,7 +21,7 @@
   <h1>No Orders!</h1>
  </ion-text>
 
- <ion-list>
+ <ion-list *ngIf="orders.length > 0">
   <ion-list-header>
     <ion-label>All Orders here</ion-label>
   </ion-list-header>
@@ -34,7 +34,7 @@
     <ion-card-content>
       <ion-item *ngFor="let p of item.productDetails">
         <ion-avatar slot="start">
-          <img [src]="p.image_url" />
+          <img crossorigin="anonymous" [src]="p.image_url" />
         </ion-avatar>
         <ion-label>{{p.name}}
 

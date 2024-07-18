@@ -1,37 +1,47 @@
 <ion-header [translucent]="true" class="ion-no-border">
-  <ion-toolbar>
+  <ion-toolbar class="ion-padding">
     <ion-title class="ion-text-center">
     Products
     </ion-title>
+    
+     
+   
   </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true" class="ion-padding">
+  <ion-select (ionChange)="loadProductsEvent($event)" fill="outline" label="Select Hotel and Load Products" labelPlacement="stacked" multiple="false" placeholder="Select Pizza">
+    <ion-select-option *ngFor="let hotel of hotels" [value]="hotel._id">{{hotel.hotelName}}</ion-select-option>
+  </ion-select>
  
-  <ion-list>
+  <ion-text color="primary" class="ion-text-center" *ngIf="products.length == 0 && hotels.length > 0">
+    <h1>No Products Addedd!</h1>
+  </ion-text>
+  <ion-list *ngIf="products.length > 0">
     <ion-list-header>
       <ion-label>All Your Products</ion-label>
     </ion-list-header>
   </ion-list>
 
   
-  <ion-accordion-group>
-    <ion-accordion value="first">
+  <ion-accordion-group *ngIf="products.length > 0">
+    <ion-accordion  *ngFor="let item of products">
       <ion-item slot="header" color="light">
-        <ion-label>Product CAtegory</ion-label>
+        <ion-label>{{item?.categoryId?.name | uppercase}}</ion-label>
       </ion-item>
       <div class="ion-padding" slot="content">
-        <ion-item>
+        <ion-item *ngFor="let p of item.products">
           <ion-avatar slot="start">
-            <img src="image" />
+            <img crossOrigin="anonymous" [src]="p?.image_url" />
           </ion-avatar>
-          <ion-label>Paneer Tikka
-            <p> Biryani </p>
-            <p> 200 </p>
+          <ion-label>{{p?.name}}
+            <p> {{item?.categoryId?.name}} </p>
+            <p> {{p?.partnerPrice | currency:"INR"}} </p>
           </ion-label>
           <!-- <ion-button fill="clear" slot="end" (click)="edit()">
             <ion-icon slot="icon-only" name="pencil"></ion-icon>
           </ion-button> -->
+          <ion-toggle (ionChange)="stockChangeEvent($event,p._id)" slot="end" [checked]="p?.stock == 1"></ion-toggle>
         </ion-item>
       </div>
     </ion-accordion>

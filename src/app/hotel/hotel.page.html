@@ -14,6 +14,14 @@
 
  <ion-input type="text" formControlName="address" label="Hotel Address" labelPlacement="stacked" fill="outline" placeholder="Enter Complete hotel address"></ion-input>
   <br>
+  <ion-item>
+    <ion-label>Category</ion-label>
+    <ion-select formControlName="categoryId"  multiple="true" placeholder="Select here" interface="popover">
+      <ion-select-option *ngFor="let cat of categories" [value]="cat._id">{{cat.name}}</ion-select-option>
+    </ion-select>
+  </ion-item>
+
+  <br>
  <ion-button size="large" expand="block" color="primary" type="submit" [disabled]="form.invalid">
     Next
   </ion-button>

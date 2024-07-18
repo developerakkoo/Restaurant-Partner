@@ -1,6 +1,9 @@
 
 <ion-content [fullscreen]="true" class="ion-padding">
-  <ion-text color="dark">
+  <div class="container">
+    <img src="assets/logo.svg" alt="">
+  </div>
+  <ion-text color="dark" class="ion-text-center">
     <h1>Restaurant Manager App</h1>
     <h4>Be a DropEat Partner</h4>
   </ion-text>
@@ -32,6 +35,13 @@
     >
       Send OTP
     </ion-button>
+    <ion-text
+    class="ion-text-right animate__animated animate__fadeIn"
+    color="primary"
+    (click)="openCapacitorSite()"
+  >
+    <p class="no-margin">Forgot password?</p>
+  </ion-text>
   </form>
 </ion-content>
 <ion-footer class="ion-no-border" routerLink="/register">

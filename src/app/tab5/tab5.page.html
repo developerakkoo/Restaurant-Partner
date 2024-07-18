@@ -7,15 +7,15 @@
 <ion-content [fullscreen]="true" class="ion-padding">
   <div class="container">
     <div class="image-container">
-      <img src="assets/Avatar.svg" alt="">
+      <img (click)="f.click()" src="assets/Avatar.svg" alt="">
     </div>
-
-    <p>Gupata Restaurant</p>
-    <p>dasdasdadgmail.com</p>
+    <input hidden #f type="file" name="" (change)="fileEvent($event)" id="">
+    <p>{{name || "..."}}</p>
+    <p> {{email || "..."}} </p>
   </div>
  <ion-list>
   <ion-card>
-    <ion-item detail="true">
+    <ion-item detail="true" routerLink="/profile">
       <ion-icon name="person-outline" slot="start"></ion-icon>
       <ion-label>Edit Profile Information</ion-label>
     </ion-item>

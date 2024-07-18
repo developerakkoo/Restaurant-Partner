@@ -1,11 +1,19 @@
 <ion-header [translucent]="true" class="ion-no-border">
   <ion-toolbar>
     <ion-title>Add Menu</ion-title>
+    
   </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true" class="ion-padding">
   <form [formGroup]="form" (ngSubmit)="onSubmit()">
+    <ion-item>
+      <ion-label>Select Hotel</ion-label>
+      <ion-select formControlName="hotelId"  multiple="false" placeholder="Select here" interface="popover">
+        <ion-select-option *ngFor="let hotel of hotels" [value]="hotel._id">{{hotel.hotelName}}</ion-select-option>
+      </ion-select>
+    </ion-item>
+    <br>
     <ion-item>
       <ion-label>Category</ion-label>
       <ion-select formControlName="categoryId"  multiple="false" placeholder="Select here" interface="popover">
@@ -45,8 +53,30 @@
     <ion-select-option value="3">Very Spicy</ion-select-option>
   </ion-select>
 </ion-item>
-    <ion-button block color="primary" type="submit" [disabled]="form.invalid">
-      Login
+    <ion-button expand="block" color="primary" type="submit" [disabled]="form.invalid">
+      Add Product
     </ion-button>
   </form>
+
+
+  <ion-modal [isOpen]="isDishImageUploadModalOpen" [initialBreakpoint]="0.75" [breakpoints]="[0, 0.25, 0.5, 0.75]">
+    <ng-template>
+      <ion-header class="ion-no-border">
+        <ion-toolbar>
+          <ion-title>Upload a Hotel Image</ion-title>
+          <ion-buttons slot="end">
+            <ion-button (click)="setOpen(false)">Close</ion-button>
+          </ion-buttons>
+        </ion-toolbar>
+      </ion-header>
+      <ion-content class="ion-padding">
+      <div class="image-upload-container">
+        <input #f hidden type="file" name="" (change)="uploadImage($event)" id="">
+        <ion-button (click)="f.click()" expand="block" fill="outline" shape="round">
+          Select and Upload
+        </ion-button>
+      </div>
+      </ion-content>
+    </ng-template>
+  </ion-modal>
 </ion-content>

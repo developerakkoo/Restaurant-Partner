@@ -1,0 +1,33 @@
+<ion-header [translucent]="true" class="ion-no-border">
+  <ion-toolbar>
+    <ion-title>My Hotels</ion-title>
+    <ion-buttons slot="start">
+      <ion-back-button></ion-back-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" class="ion-padding">
+
+  <ion-text color="primary" class="ion-text-center" *ngIf="hotels.length == 0">
+    <h1>No Hotels Registered.</h1>
+  </ion-text>
+  <br>
+  <ion-button *ngIf="hotels.length == 0" (click)="openPage('/hotel')" expand="block" size="large">
+   Add a new Hotel
+  </ion-button>
+ <ion-list *ngIf="hotels.length > 0">
+  <ion-list-header>
+    <ion-label>All Hotels Registered under me.</ion-label>
+  </ion-list-header>
+
+  <ion-item *ngFor="let item of hotels">
+    <ion-avatar slot="start">
+      <img crossorigin="anonymous" [src]="item.image_url" />
+    </ion-avatar>
+    <ion-label class="ion-text-wrap"> {{item.hotelName}}
+      <p> Address:- {{item.address}} </p> </ion-label>
+     <ion-toggle [checked]="item?.isOnline" (ionChange)="toggleStatusEvent($event, item?._id)" slot="end"></ion-toggle>
+  </ion-item>
+</ion-list>
+</ion-content>

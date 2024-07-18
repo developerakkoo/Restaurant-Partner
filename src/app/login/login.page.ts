@@ -5,6 +5,8 @@ import { ToastController, LoadingController } from '@ionic/angular';
 import { AuthService } from '../services/auth.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import { DataService } from '../services/data.service';
+import { Browser } from '@capacitor/browser';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-login',
@@ -41,6 +43,9 @@ export class LoginPage implements OnInit {
     toast.present();
   }
 
+   openCapacitorSite = async () => {
+    await Browser.open({ url: environment.FORGOT_PASSWORD_LINK });
+  };
   async login(){
     let loading = await this.loadingController.create({
       message:"Logging In...",
@@ -50,35 +55,37 @@ export class LoginPage implements OnInit {
     await loading.present();
     if(this.form.valid){
       console.log(this.form.value);
-      this.auth.login({phoneNumber: this.form.value.phoneNumber})
-      .subscribe({
-        next:async(value:any) =>{
-          console.log(value);
-          await loading.dismiss();
-          this.presentToast("Logged In Successfully.",2000, 'success','bottom');
-          let userId = value['data']['userId'];
-          let accessToken = value['data']['accessToken'];
-          let refreshToken = value['data']['refreshToken'];
-          let hotelCount = value['data']['hotelCount'];
-          await this.data.set("userId", userId);
-          await this.data.set("accessToken", accessToken);
-          await this.data.set("refreshToken", refreshToken);
-          await this.data.set("hotelCount", hotelCount);
-          if(hotelCount > 0){
-            this.router.navigate(['tabs','tabs','tab1']);
+      await loading.dismiss();
+      this.router.navigate(['tabs','tabs','tab1']);
+      // this.auth.login({phoneNumber: this.form.value.phoneNumber})
+      // .subscribe({
+      //   next:async(value:any) =>{
+      //     console.log(value);
+      //     await loading.dismiss();
+      //     this.presentToast("Logged In Successfully.",2000, 'success','bottom');
+      //     let userId = value['data']['userId'];
+      //     let accessToken = value['data']['accessToken'];
+      //     let refreshToken = value['data']['refreshToken'];
+      //     let hotelCount = value['data']['hotelCount'];
+      //     await this.data.set("userId", userId);
+      //     await this.data.set("accessToken", accessToken);
+      //     await this.data.set("refreshToken", refreshToken);
+      //     await this.data.set("hotelCount", hotelCount);
+      //     if(hotelCount > 0){
+      //       this.router.navigate(['tabs','tabs','tab1']);
 
-          }else{
-            this.router.navigate(['hotel']);
-          }
-        },
-        error:async(error:HttpErrorResponse) =>{
-          console.log(error.error);
-          await loading.dismiss();
-          this.presentToast(error.error.message,2000, 'danger','bottom');
+      //     }else{
+      //       this.router.navigate(['hotel']);
+      //     }
+      //   },
+      //   error:async(error:HttpErrorResponse) =>{
+      //     console.log(error.error);
+      //     await loading.dismiss();
+      //     this.presentToast(error.error.message,2000, 'danger','bottom');
 
           
-        }
-      })
+      //   }
+      // })
     }
   }
 

@@ -9,6 +9,7 @@ import { AppComponent } from './app.component';
 import { HttpClientModule } from '@angular/common/http';
 import { SocketIoModule, SocketIoConfig } from 'ngx-socket-io';
 import { IonicStorageModule } from '@ionic/storage-angular';
+import { Browser } from '@capacitor/browser';
 
 const config: SocketIoConfig = { url: 'https://api.dropeat.in', options: {} };
 @NgModule({

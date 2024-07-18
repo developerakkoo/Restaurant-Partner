@@ -16,6 +16,7 @@ export class HotelPage implements OnInit {
   form:FormGroup;
   isHotelImageUploadModalOpen:boolean = false;
   hotelId:any;
+  categories:any[] = [];
   constructor(private formBuilder: FormBuilder,
     private auth:AuthService,
     private data: DataService,
@@ -25,8 +26,12 @@ export class HotelPage implements OnInit {
   ) { 
     this.form = this.formBuilder.group({
       hotelName:[,[Validators.required]],
-      address:[,[Validators.required]]
+      address:[,[Validators.required]],
+      categoryId:[[],[Validators.required]]
     })
+  }
+  ngOnInit() {
+    this.loadCategory();
   }
   async presentToast(msg:string, duration:any, color:any, position:any) {
     const toast = await this.toastController.create({
@@ -52,7 +57,9 @@ export class HotelPage implements OnInit {
         console.log(value);
         this.isHotelImageUploadModalOpen = false;
         this.presentToast("Hotel Registered Successfully", 2000, 'success','bottom');
-        this.router.navigate(['tabs','tabs','tab1']);
+        setTimeout(() =>{
+          this.router.navigate(['tabs','tabs','tab1']);
+         },2000)
       },
       error:async(error:HttpErrorResponse) =>{
         console.log(error);
@@ -77,7 +84,7 @@ export class HotelPage implements OnInit {
     await loading.present();
     if(this.form.valid){
       console.log(this.form.value);
-      this.auth.hotelRegister(this.form.value.hotelName,this.form.value.address)
+      this.auth.hotelRegister(this.form.value.hotelName,this.form.value.address, this.form.value.categoryId)
       .subscribe({
         next:async(value:any) =>{
           console.log(value);
@@ -85,6 +92,7 @@ export class HotelPage implements OnInit {
           this.isHotelImageUploadModalOpen = true;
           this.hotelId = value['data']['_id'];
           await this.data.set("hotelCount", "1");
+          await this.data.set("hotelId", value['data']['_id']);
         },
         error:async(error:HttpErrorResponse) =>{
           console.log(error.error);
@@ -95,7 +103,20 @@ export class HotelPage implements OnInit {
       })
     }
   }
-  ngOnInit() {
+
+
+  loadCategory(){
+    this.auth.getAllCategory()
+    .subscribe({
+      next:async(value:any) =>{
+        console.log(value);
+        this.categories = value['data']['content'];
+      },
+      error:async(error:HttpErrorResponse) =>{
+        console.log(error.error);
+        
+      }
+    })
   }
 
 
