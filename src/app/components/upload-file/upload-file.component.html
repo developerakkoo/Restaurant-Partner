@@ -1,0 +1,8 @@
+<div class="upload-container" (click)="file.click()">
+  <div class="upload-percent"></div>
+  <p class="text-button">Select File</p>
+  <p class="filename"> {{fileName || "No file selected"}} </p>
+</div>
+
+
+<input type="file"  hidden #file (change)="fileUpload($event)">

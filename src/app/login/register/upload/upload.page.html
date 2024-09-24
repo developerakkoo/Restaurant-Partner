@@ -1,0 +1,49 @@
+<ion-header [translucent]="true" class="ion-no-border">
+  <ion-toolbar>
+    <ion-title>Verify your identity</ion-title>
+    
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" class="ion-padding">
+
+  <div class="container-center-form" *ngIf="fileUploadCount == 3">
+    <p>Registration Successfull</p>
+    <p>Welcome to Breezy!</p>
+    <ion-spinner name="bubbles"></ion-spinner>
+  </div>
+  <ion-list *ngIf="fileUploadCount < 3">
+    <ion-list-header>
+      <ion-label>Your Personal information is safe with us!</ion-label>
+    </ion-list-header>
+
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title>Upload your Adhar card</ion-card-title>
+      <ion-card-subtitle>Only JPEG, JPG, PNG and PDF formats with less than 10MB.</ion-card-subtitle>
+    </ion-card-header>
+    <ion-card-content>
+      <app-upload-file [fileType]="11" (fileEvent)="fileUpload($event)"></app-upload-file>
+    </ion-card-content>
+  </ion-card>
+ 
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title> Upload your Pan card</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <app-upload-file [fileType]="22" (fileEvent)="fileUpload($event)"></app-upload-file>
+    </ion-card-content>
+  </ion-card>
+</ion-list>
+</ion-content>
+<ion-footer class="ion-no-border ion-padding" *ngIf="fileUploadCount < 3">
+  <ion-toolbar>
+    <ion-button (click)="next()" expand="block" fill="solid" mode="ios">
+      Next
+    </ion-button>
+    <ion-button (click)="goBack()" expand="block" fill="clear" shape="round">
+      Back
+    </ion-button>
+  </ion-toolbar>
+</ion-footer>

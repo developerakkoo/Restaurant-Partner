@@ -51,23 +51,23 @@ export class HotelPage implements OnInit {
     let formdata = new FormData();
     formdata.append("document", file, file.name);
     formdata.append("hotelId", this.hotelId);
-    this.auth.uploadHotelImage(formdata)
-    .subscribe({
-      next:async(value:any) =>{
-        console.log(value);
-        this.isHotelImageUploadModalOpen = false;
-        this.presentToast("Hotel Registered Successfully", 2000, 'success','bottom');
-        setTimeout(() =>{
-          this.router.navigate(['tabs','tabs','tab1']);
-         },2000)
-      },
-      error:async(error:HttpErrorResponse) =>{
-        console.log(error);
-        this.isHotelImageUploadModalOpen = true;
-        this.presentToast("Image Upload Failed", 2000, 'danger','bottom')
+    // this.auth.uploadHotelImage(formdata)
+    // .subscribe({
+    //   next:async(value:any) =>{
+    //     console.log(value);
+    //     this.isHotelImageUploadModalOpen = false;
+    //     this.presentToast("Hotel Registered Successfully", 2000, 'success','bottom');
+    //     setTimeout(() =>{
+    //       this.router.navigate(['tabs','tabs','tab1']);
+    //      },2000)
+    //   },
+    //   error:async(error:HttpErrorResponse) =>{
+    //     console.log(error);
+    //     this.isHotelImageUploadModalOpen = true;
+    //     this.presentToast("Image Upload Failed", 2000, 'danger','bottom')
 
-      }
-    })
+    //   }
+    // })
 
   }
 

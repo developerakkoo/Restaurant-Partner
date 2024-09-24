@@ -1,0 +1,126 @@
+<ion-header [translucent]="true" class="ion-no-border">
+  <ion-toolbar>
+    <ion-title>Create an account</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <div class="container-center-form">
+    <form [formGroup]="form">
+        <ion-card class="ion-padding">
+          <ion-card-header>
+            <ion-card-subtitle>Business Details</ion-card-subtitle>
+          </ion-card-header>
+          <ion-input
+          fill="outline"
+          required
+          formControlName="shopeName"
+          label="Shop name"
+          labelPlacement="stacked"
+          placeholder="Unique Laundry"
+          helperText="Please enter registered business name."
+          type="text"
+        ></ion-input>
+        <br>
+          <ion-input
+        fill="outline"
+        required
+        formControlName="email"
+        label="Email"
+        labelPlacement="stacked"
+        placeholder="something@domain.com"
+        helperText="Please enter a Valid Email address to ensure you get all the updates"
+        type="email"
+      ></ion-input>
+
+      <br />
+      <ion-input
+        fill="outline"
+        required
+        formControlName="name"
+        label="Full name"
+        labelPlacement="stacked"
+        placeholder="Enter your full name"
+        helperText="Name as per PAN CARD"
+        type="text"
+      ></ion-input>
+
+      <br />
+      <ion-input
+        fill="outline"
+        required
+        formControlName="phoneNumber"
+        label="Business Phone number"
+        labelPlacement="stacked"
+        placeholder="+91"
+        type="tel"
+      ></ion-input>
+        </ion-card>
+   
+
+    <ion-card formGroupName="address" class="ion-padding"><ion-card-header>
+      <ion-card-subtitle>Address Details</ion-card-subtitle>
+    </ion-card-header>
+      <ion-input
+      fill="outline"
+      required
+      formControlName="addressLine1"
+      label="Business address line 1"
+      labelPlacement="stacked"
+      placeholder="..."
+      type="text"
+    ></ion-input>
+    <br>
+    <ion-input
+    fill="outline"
+    required
+    formControlName="addressLine2"
+    label="Business address line 2"
+    labelPlacement="stacked"
+    placeholder="..."
+    type="text"
+  ></ion-input>
+  <br>
+  <ion-input
+  fill="outline"
+  required
+  formControlName="addressLine3"
+  label="Business address line 3"
+  labelPlacement="stacked"
+  placeholder="..."
+  type="text"
+></ion-input>
+<br>
+
+<ion-input
+fill="outline"
+required
+formControlName="city"
+label="City"
+labelPlacement="stacked"
+placeholder="..."
+type="text"
+></ion-input>
+    </ion-card>
+      
+
+    <!-- <ion-card>
+      <ion-card-header>
+        <ion-card-subtitle>Shop timings</ion-card-subtitle>
+
+      </ion-card-header>
+    </ion-card> -->
+
+    </form>
+  </div>
+</ion-content>
+<ion-footer class="ion-no-border ion-padding">
+  <ion-toolbar>
+    <ion-button (click)="register()" expand="block" fill="solid" mode="ios">
+      Next
+    </ion-button>
+    <ion-button (click)="goBack()" expand="block" fill="clear" shape="round">
+      Back
+    </ion-button>
+  </ion-toolbar>
+</ion-footer>

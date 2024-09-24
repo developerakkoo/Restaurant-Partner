@@ -29,11 +29,11 @@ export class AuthService {
   }
 
   register(body:{}){
-    return this.http.post(environment.URL + "auth/partner/register", body);
+    return this.http.post(environment.URL + "partner/register", body);
   }
 
   login(body:{}){
-    return this.http.post(environment.URL + "auth/partner/login", body);
+    return this.http.post(environment.URL + "partner/login", body);
   }
 
   logout(){
@@ -66,8 +66,8 @@ export class AuthService {
       },})
   }
 
-  uploadHotelImage(formdata:any){
-    return this.http.post(environment.URL + `partner/hotel/upload/image`, formdata,{
+  uploadImage(formdata:any){
+    return this.http.post(environment.URL + `partner/document/upload`, formdata,{
       headers: {
         'x-access-token': this.accessToken.value,
       },})

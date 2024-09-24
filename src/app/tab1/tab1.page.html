@@ -6,62 +6,63 @@
     <ion-button fill="clear" slot="end" (click)="openPage('notifications')">
       <ion-icon slot="icon-only" name="notifications-outline"></ion-icon>
     </ion-button>
-    <ion-button fill="clear" slot="end" (click)="openPage('hotel/view')">
-      <ion-icon slot="icon-only" name="business-outline"></ion-icon>
-    </ion-button>
+    
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true" class="ion-padding">
-  <ion-grid fixed>
+<ion-content [fullscreen]="true" >
+  <ion-grid >
     <ion-row>
+      <ion-list-header>
+        <ion-label>Dashboard</ion-label>
+        <ion-button>View All</ion-button>
+      </ion-list-header>
       <ion-col size="6">
         <ion-card>
-          <div class="card-container">
-            <img src="assets/today.png" alt="">
-            <p class="count"> {{todaysOrders || 0}} </p>
-            <p class="sub-header">Today's Orders</p>
-          </div>
+          <ion-card-header>
+            <ion-card-subtitle>Total Orders</ion-card-subtitle>
+            <ion-card-title>{{totalOrders || 0}}</ion-card-title>
+          </ion-card-header>
         </ion-card>
       </ion-col>
+
       <ion-col size="6">
         <ion-card>
-          <div class="card-container">
-            <img src="assets/monthly.png" alt="">
-            <p class="count"> {{monthlyOrders || 0}} </p>
-            <p class="sub-header">Monthly Orders</p>
-          </div>
+          <ion-card-header>
+            <ion-card-subtitle>Todays Orders</ion-card-subtitle>
+            <ion-card-title>{{todaysOrders|| 0}}</ion-card-title>
+          </ion-card-header>
         </ion-card>
       </ion-col>
-    </ion-row>
-    <ion-row>
-      <ion-col size="6">
+
+      <ion-col size="12">
         <ion-card>
-          <div class="card-container">
-            <img src="assets/stock.png" alt="">
-            <p class="count"> {{dishInStock || 0}} </p>
-            <p class="sub-header">Stock Products</p>
-          </div>
+          <ion-card-header>
+            <ion-card-subtitle>Monthly Revenue</ion-card-subtitle>
+            <ion-card-title>{{monthlyRevenue || 0}}</ion-card-title>
+          </ion-card-header>
         </ion-card>
       </ion-col>
-      <ion-col size="6">
+      <ion-col size="12">
         <ion-card>
-          <div class="card-container">
-            <img src="assets/ofs.png" alt="">
-            <p class="count"> {{dishOutOfStock || 0}} </p>
-            <p class="sub-header">Out of Stock Products</p>
-          </div>
+          <ion-card-header>
+            <ion-card-subtitle>Weekly revenue</ion-card-subtitle>
+            <ion-card-title>{{weeklyRevenue || 0}}</ion-card-title>
+          </ion-card-header>
         </ion-card>
       </ion-col>
     </ion-row>
   </ion-grid>
   <br>
   
+  <ion-list-header>
+    <ion-label>Actions</ion-label>
+  </ion-list-header>
   <ion-card fill="outline" routerLink="/products">
     <ion-item detail>
     <ion-icon name="add" slot="start"></ion-icon>
 
-      <ion-label>Add Products</ion-label>
+      <ion-label>Add Services</ion-label>
     </ion-item>
   </ion-card>
  

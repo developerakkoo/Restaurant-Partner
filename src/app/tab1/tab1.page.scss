@@ -4,7 +4,7 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    padding: 10px;
+    
 }
 
 .card-container img{
@@ -22,3 +22,17 @@
     margin: 0;
 
 }
+
+ion-grid{
+    margin: 0;
+}
+
+ion-col,ion-row{
+    margin: 0;
+    padding: 0;
+}
+
+ion-card{
+    border-radius: 20px;
+}
+

@@ -12,12 +12,12 @@ import { Socket } from 'ngx-socket-io';
   styleUrls: ['tab1.page.scss']
 })
 export class Tab1Page {
-  restaurantName:string = "Akshay hotel";
-  dishInStock:any;
-  dishOutOfStock:any;
+  restaurantName:string = "Akshay Laundry";
+  weeklyRevenue:any;
+  monthlyRevenue:any;
   monthlyOrders:any;
   todaysOrders:any;
-  hotelCount:any;
+  totalOrders:any;
 
   constructor(private router: Router,
     private socket: Socket,
@@ -29,28 +29,20 @@ export class Tab1Page {
   }
 
   ionViewDidEnter(){
-    this.checkForHotels();
-    this.getAnalyticsData();
+    // this.getAnalyticsData();
   }
 
-  async checkForHotels(){
-    this.hotelCount = await this.data.get("hotelCount");
-    console.log(this.hotelCount);
-    if(this.hotelCount == 0){
-      this.router.navigate(['hotel']);
-    }
-  }
-
+ 
   getAnalyticsData(){
     this.auth.getPartnerDashboard()
     .subscribe({
       next:async(value:any) =>{
         console.log(value);
         let data = value['data'];
-        this.dishInStock = data['dishInStock'];
-        this.todaysOrders = data['todaysOrders'];
-        this.monthlyOrders = data['monthlyOrder'];
-        this.dishOutOfStock = data['dishOutOfStock'];
+        // this.dishInStock = data['dishInStock'];
+        // this.todaysOrders = data['todaysOrders'];
+        // this.monthlyOrders = data['monthlyOrder'];
+        // this.dishOutOfStock = data['dishOutOfStock'];
         
       },
       error:async(error:HttpErrorResponse) =>{
