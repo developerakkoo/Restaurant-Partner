@@ -11,10 +11,10 @@ import { SocketIoModule, SocketIoConfig } from 'ngx-socket-io';
 import { IonicStorageModule } from '@ionic/storage-angular';
 import { Browser } from '@capacitor/browser';
 
-const config: SocketIoConfig = { url: 'https://api.dropeat.in', options: {} };
+const config: SocketIoConfig = { url: 'https://api.breezyemart.com', options: {} };
 @NgModule({
   declarations: [AppComponent],
-  imports: [BrowserModule, IonicModule.forRoot(), AppRoutingModule,IonicStorageModule.forRoot({name:"dropeat-partner"}) ,HttpClientModule, SocketIoModule.forRoot(config)],
+  imports: [BrowserModule, IonicModule.forRoot(), AppRoutingModule,IonicStorageModule.forRoot({name:"laundry-partner"}) ,HttpClientModule, SocketIoModule.forRoot(config)],
   providers: [{ provide: RouteReuseStrategy, useClass: IonicRouteStrategy }],
   bootstrap: [AppComponent],
 })

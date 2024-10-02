@@ -67,10 +67,11 @@ export class AuthService {
   }
 
   uploadImage(formdata:any){
-    return this.http.post(environment.URL + `partner/document/upload`, formdata,{
-      headers: {
-        'x-access-token': this.accessToken.value,
-      },})
+    console.log("data in upload image http function");
+    console.log(formdata);
+    
+    
+    return this.http.post(environment.URL + `partner/document/upload`, formdata)
   }
   uploadDishImage(formdata:any){
     return this.http.post(environment.URL + `partner/hotel/dish/upload-image`, formdata,{

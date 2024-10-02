@@ -19,10 +19,19 @@ export class UploadFileComponent  implements OnInit {
 
 
   fileUpload(ev:any){
-    console.log(ev.target.files[0]);
-    this.fileName = ev.target.files[0]['name'];
-    this.file = ev.target.files[0];
-    this.fileEvent.emit({file: this.file, type: this.fileType});
+    if (ev.target.files && ev.target.files.length > 0) {
+      this.fileName = ev.target.files[0].name;  // Capture the file name
+      this.file = ev.target.files[0];  // Capture the file
+      console.log("File selected:", this.file);  // Log to verify
+  
+      // Emit the file and type
+      this.fileEvent.emit({
+        file: this.file, 
+        type: this.fileType  // Make sure `fileType` is correctly initialized
+      });
+    } else {
+      console.error("No file selected.");
+    }
   }
 
 }

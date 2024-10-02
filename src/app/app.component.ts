@@ -11,7 +11,7 @@ export class AppComponent {
   constructor(private data: DataService,
               private router: Router
   ) {
-    // this.checkForLoginStatus();
+    this.checkForLoginStatus();
   }
 
   async checkForLoginStatus(){

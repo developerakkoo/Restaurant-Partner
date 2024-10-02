@@ -1,18 +1,19 @@
 <ion-header [translucent]="true" class="ion-no-border">
   <ion-toolbar>
-    <ion-title>Verify your identity</ion-title>
+    <ion-title *ngIf="fileUploadCount != 2">Verify your identity</ion-title>
+    <ion-title *ngIf="fileUploadCount == 2">Registration Complete</ion-title>
     
   </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true" class="ion-padding">
 
-  <div class="container-center-form" *ngIf="fileUploadCount == 3">
-    <p>Registration Successfull</p>
-    <p>Welcome to Breezy!</p>
+  <div class="container" *ngIf="fileUploadCount == 2">
+    <p class="title">Registration Successfull</p>
+    <p class="sub-title">Welcome to Breezy!</p>
     <ion-spinner name="bubbles"></ion-spinner>
   </div>
-  <ion-list *ngIf="fileUploadCount < 3">
+  <ion-list *ngIf="fileUploadCount != 2">
     <ion-list-header>
       <ion-label>Your Personal information is safe with us!</ion-label>
     </ion-list-header>
@@ -39,10 +40,10 @@
 </ion-content>
 <ion-footer class="ion-no-border ion-padding" *ngIf="fileUploadCount < 3">
   <ion-toolbar>
-    <ion-button (click)="next()" expand="block" fill="solid" mode="ios">
+    <ion-button *ngIf="fileUploadCount != 2" (click)="next()" expand="block" fill="solid" mode="ios">
       Next
     </ion-button>
-    <ion-button (click)="goBack()" expand="block" fill="clear" shape="round">
+    <ion-button *ngIf="fileUploadCount != 2" (click)="goBack()" expand="block" fill="clear" shape="round">
       Back
     </ion-button>
   </ion-toolbar>
