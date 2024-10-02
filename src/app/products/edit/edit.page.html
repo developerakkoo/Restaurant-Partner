@@ -1,14 +1,14 @@
 <ion-header [translucent]="true" class="ion-no-border">
   <ion-toolbar>
-    <ion-title>Add Service</ion-title>
-    <ion-buttons slot="start">
-      <ion-back-button defaultHref="tabs/tabs/tab1"></ion-back-button>
-    </ion-buttons>
+    <ion-title>Edit Service</ion-title>
+    <ion-button (click)="close()" fill="clear" slot="end">
+      <ion-icon slot="icon-only" name="close"></ion-icon>
+    </ion-button>
   </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true" class="ion-padding">
-   <form [formGroup]="form" (ngSubmit)="onSubmit()">
+  <form [formGroup]="form" (ngSubmit)="onSubmit()"></form>
     
     <ion-item>
       <ion-label>Category</ion-label>
@@ -41,9 +41,8 @@
      <ion-input formControlName="perKgPrice" type="text" fill="outline" *ngIf="showPerKgPrice" label="Per Kg Price" labelPlacement="stacked" placeholder="Per Kg Price"></ion-input>
 <br>
     <ion-button expand="block" color="primary" type="submit" [disabled]="form.invalid">
-      Add Service
+      Edit Service
     </ion-button>
-  </form> 
 
 
   <ion-modal [isOpen]="isDishImageUploadModalOpen" [initialBreakpoint]="0.75" [breakpoints]="[0, 0.25, 0.5, 0.75]">
@@ -60,7 +59,7 @@
       <div class="image-upload-container">
         <input #f hidden type="file" name="" (change)="uploadImage($event)" id="">
         <ion-button (click)="f.click()" expand="block" fill="outline" shape="round">
-          Select and Upload Image
+          Select and Edit image
         </ion-button>
       </div>
       </ion-content>

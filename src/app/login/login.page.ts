@@ -17,6 +17,7 @@ export class LoginPage implements OnInit {
 
   form!:FormGroup;
 
+  shopId:any;
   constructor(private router:Router,
               private formBuilder: FormBuilder,
               private toastController: ToastController,
@@ -30,7 +31,7 @@ export class LoginPage implements OnInit {
     })
    }
 
-  ngOnInit() {
+  async ngOnInit() {
   }
 
   async presentToast(msg:string, duration:any, color:any, position:any) {
@@ -60,10 +61,12 @@ export class LoginPage implements OnInit {
           await loading.dismiss();
           if(value['data']['isRegistered'] === true){
             let userId = value['data']['userId'];
+            let shopId = value['data']['shop']['_id'];
             let accessToken = value['data']['accessToken'];
             let refreshToken = value['data']['refreshToken'];
             
             await this.data.set("userId", userId);
+            await this.data.set("shopId", shopId);
             await this.data.set("accessToken", accessToken);
             await this.data.set("refreshToken", refreshToken);
             this.presentToast("Logged In Successfully.",2000, 'success','bottom');

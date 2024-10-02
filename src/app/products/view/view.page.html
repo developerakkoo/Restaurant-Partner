@@ -1,0 +1,36 @@
+<ion-header [translucent]="true" class="ion-no-border">
+  <ion-toolbar>
+    <ion-title>All Services</ion-title>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="tabs/tabs/tab1"></ion-back-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-list>
+    <ion-list-header>
+      <ion-label>All Services</ion-label>
+    </ion-list-header>
+
+    <ion-item *ngFor="let item of services">
+      <ion-avatar slot="start">
+        <img crossorigin="anonymous" [src]="item.image_url" />
+      </ion-avatar>
+      <ion-label> {{item?.name}} <span *ngIf="item?.type == 0">Press</span>
+        <span *ngIf="item?.type == 1">Washing</span>
+        <span *ngIf="item?.type == 2">
+        Dry Clean</span> 
+     <p *ngIf="item?.quantityAcceptedIn === 1 || item?.quantityAcceptedIn === 2 "> {{item?.perKgPrice|currency:"INR"}} /Kg</p>
+     <p *ngIf="item?.quantityAcceptedIn === 0 || item?.quantityAcceptedIn === 2"> {{item?.perPeacePrice|currency:"INR"}} /piece</p>
+      </ion-label>
+      <ion-button (click)="presentModalEditSerive(item)" fill="clear" slot="end">
+        <ion-icon slot="icon-only" name="pencil-outline"></ion-icon>
+      </ion-button>
+      <ion-button (click)="presentAlertConfirmDelete(item)" fill="clear" slot="end">
+
+        <ion-icon slot="icon-only" name="trash-outline"></ion-icon>
+      </ion-button>
+    </ion-item>
+  </ion-list>
+</ion-content>

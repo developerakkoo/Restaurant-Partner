@@ -1,17 +1,19 @@
-import { Component, OnInit } from '@angular/core';
-import { AuthService } from '../services/auth.service';
+import { HttpErrorResponse } from '@angular/common/http';
+import { Component, Input, OnInit } from '@angular/core';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { LoadingController, ToastController } from '@ionic/angular';
-import { HttpBackend, HttpErrorResponse } from '@angular/common/http';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { DataService } from '../services/data.service';
+import { LoadingController, ModalController, ToastController } from '@ionic/angular';
+import { AuthService } from 'src/app/services/auth.service';
+import { DataService } from 'src/app/services/data.service';
 
 @Component({
-  selector: 'app-products',
-  templateUrl: './products.page.html',
-  styleUrls: ['./products.page.scss'],
+  selector: 'app-edit',
+  templateUrl: './edit.page.html',
+  styleUrls: ['./edit.page.scss'],
 })
-export class ProductsPage implements OnInit {
+export class EditPage implements OnInit {
+
+  @Input() id:any;
 
   shopId:any;
   serviceId:any;
@@ -20,24 +22,40 @@ export class ProductsPage implements OnInit {
   form!:FormGroup;
   showPerPiecePrice = false;
   showPerKgPrice = false;
-  constructor(private auth: AuthService,
+  constructor(private modalController: ModalController,
+    private auth: AuthService,
               private router: Router,
               private toastController: ToastController,
               private data:DataService,
               private fb: FormBuilder,
               private loadingController: LoadingController
   ) {
-   this.createForm();
-   }
-
- async ngOnInit() {
- 
+    
+    this.loadCategory();
+    
+    
+  }
   
+  ngOnInit() {
+    console.log(this.id);
+    this.createForm(this.id);
+
+
+    
+  }
+  ionViewDidEnter(){
   }
 
-  async createForm(){
+  close(){
+    this.modalController.dismiss();
+  }
+
+
+  async createForm(id:any){
+    console.log("Form Craeted");
+    
     this.form = this.fb.group({
-      shopeId:[''],
+      shopeId:[id],
      categoryId:['',[Validators.required]],
      type:['',[Validators.required]],
      name:['',[Validators.required]],
@@ -49,18 +67,13 @@ export class ProductsPage implements OnInit {
    })
    // Initialize visibility of fields based on quantityAcceptedIn's current value
    this.onQuantityChange({ detail: { value: this.form.get('quantityAcceptedIn')?.value || "" } });
-      this.shopId = await this.data.get("shopId");
-    console.log("shop Id");
-    console.log(this.shopId);
+     
       // Set the shopId in the form control
-      this.form.patchValue({
-        shopeId: this.shopId
-      });
+      // this.form.patchValue({
+      //   shopeId: this.id
+      // });
   }
 
-  ionViewDidEnter(){
-    this.loadCategory();
-  }
 
   loadCategory(){
     this.auth.getAllCategory()
@@ -92,13 +105,13 @@ export class ProductsPage implements OnInit {
     console.log(file);
     let formdata = new FormData();
     formdata.append("file", file, file.name);
-    formdata.append("serviceId", this.serviceId);
+    formdata.append("serviceId", this.id);
     this.auth.uploadServiceImage(formdata)
     .subscribe({
       next:async(value:any) =>{
         console.log(value);
         this.setOpen(false);
-        this.presentToast("Service Addedd Successfully", 2000, 'success','bottom');
+        this.presentToast("Service Edited Successfully", 2000, 'success','bottom');
        setTimeout(() =>{
         this.router.navigate(['products','view']);
        },2000)
@@ -158,7 +171,7 @@ export class ProductsPage implements OnInit {
     if(this.form.valid){
       
       console.log(this.form.value);
-      this.auth.addService(this.form.value)
+      this.auth.editService(this.form.value, this.id)
       .subscribe({
         next:(value:any) =>{
           console.log(value);
@@ -173,6 +186,4 @@ export class ProductsPage implements OnInit {
     }
   }
 
-
- 
 }

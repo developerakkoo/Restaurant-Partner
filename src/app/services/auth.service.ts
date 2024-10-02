@@ -11,7 +11,7 @@ export class AuthService {
   userAuthState:BehaviorSubject<any> = new BehaviorSubject(false);
   accessToken: BehaviorSubject<string> = new BehaviorSubject("");
   userId: BehaviorSubject<string> = new BehaviorSubject("");
-  hotelId: BehaviorSubject<string> = new BehaviorSubject("");
+  shopId: BehaviorSubject<string> = new BehaviorSubject("");
   address: BehaviorSubject<string> = new BehaviorSubject("");
   constructor(private http: HttpClient,
               private storage: DataService
@@ -21,11 +21,11 @@ export class AuthService {
   async init(){
     let token = await this.storage.get("accessToken");
     let userId = await this.storage.get("userId");
-    let hotelId = await this.storage.get("hotelId");
+    let shopId = await this.storage.get("shopId");
 
     this.accessToken.next(token);
     this.userId.next(userId);
-    this.hotelId.next(hotelId);
+    this.shopId.next(shopId);
   }
 
   register(body:{}){
@@ -73,8 +73,8 @@ export class AuthService {
     
     return this.http.post(environment.URL + `partner/document/upload`, formdata)
   }
-  uploadDishImage(formdata:any){
-    return this.http.post(environment.URL + `partner/hotel/dish/upload-image`, formdata,{
+  uploadServiceImage(formdata:any){
+    return this.http.post(environment.URL + `partner/service/upload-image`, formdata,{
       headers: {
         'x-access-token': this.accessToken.value,
       },})
@@ -103,7 +103,7 @@ export class AuthService {
   }
 
   markCategoryStockStatus(isOutOfStock:number,categoryId:string){
-    return this.http.put(environment.URL + `partner/category/${categoryId}/toggleStoke/${this.hotelId.value}`,{
+    return this.http.put(environment.URL + `partner/category/${categoryId}/toggleStoke/${this.shopId.value}`,{
      
      isOutOfStock:isOutOfStock
     },{
@@ -122,30 +122,28 @@ export class AuthService {
       },})
   }
 
-  addProduct(body:any){
-    return this.http.post(environment.URL + `partner/hotel/add-dish`, {
-     hotelId: body.hotelId,
-     categoryId:body.categoryId,
-     name:body.name,
-     dishType: body.dishType,
-     timeToPrepare:body.timeToPrepare,
-     partnerPrice: body.partnerPrice,
-     spicLevel: body.spicLevel,
-     stock: body.stock
-    },{
+  addService(body:any){
+    return this.http.post(environment.URL + `partner/service/add`, body,{
       headers: {
         'x-access-token': this.accessToken.value,
       },})
   }
 
+
+  editService(body:any,id:any){
+    return this.http.post(environment.URL + `partner/service/update/${id}`, body,{
+      headers: {
+        'x-access-token': this.accessToken.value,
+      },})
+  }
   getAllOrders(status:any){
-   return this.http.get(environment.URL + `partner/get/orders?hotelId=${this.hotelId.value}&status=${status}&populate=1`,{
+   return this.http.get(environment.URL + `partner/get/orders?hotelId=${this.shopId.value}&status=${status}&populate=1`,{
       headers: {
         'x-access-token': this.accessToken.value,
       },})
   }
   getAllCategory(){
-    return this.http.get(environment.URL + `admin/category/get/all`,{
+    return this.http.get(environment.URL + `partner/category/getAll`,{
       headers:{
         'x-access-token': this.accessToken.value.toString()
       }
@@ -174,8 +172,8 @@ export class AuthService {
     })
   }
 
-  getAllHotelProducts(){
-    return this.http.get(environment.URL + `hotel/dish/get/${this.hotelId.value.toString()}`,{
+  getAllLaundryServices(){
+    return this.http.get(environment.URL + `partner/service/get/shopId/${this.shopId.value.toString()}`,{
       headers:{
         'x-access-token': this.accessToken.value.toString()
       }
