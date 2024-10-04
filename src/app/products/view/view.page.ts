@@ -4,6 +4,7 @@ import { AlertController, LoadingController, ModalController } from '@ionic/angu
 import { AuthService } from 'src/app/services/auth.service';
 import { DataService } from 'src/app/services/data.service';
 import { EditPage } from '../edit/edit.page';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-view',
@@ -17,6 +18,7 @@ export class ViewPage implements OnInit {
   constructor(private data:DataService,
               private loadingController: LoadingController,
               private auth: AuthService,
+              private router:Router,
               private alertController: AlertController,
               private modalController: ModalController
   ) { }
@@ -55,14 +57,11 @@ export class ViewPage implements OnInit {
 
  
   async presentModalEditSerive(item:any) {
-    const modal = await this.modalController.create({
-    component: EditPage,
-    componentProps: { id: item._id }
-    });
-  
-    await modal.present();
-    const data = await modal.onDidDismiss();
-    console.log(data)
+    console.log("Router");
+    console.log(item._id);
+    
+    
+    this.router.navigate(['products','edit',item._id]);
   }
   async presentAlertConfirmDelete(item:any) {
     const alert = await this.alertController.create({
@@ -97,6 +96,17 @@ export class ViewPage implements OnInit {
 
   delete(item:any){
     console.log(item._id);
+    this.auth.deleteServiceById(item._id)
+    .subscribe({
+      next:async(value:any) =>{
+        console.log(value);
+          this.getAllServices();
+      },
+      error:async(error:HttpErrorResponse) =>{
+        console.log(error);
+        
+      }
+    })
     
   }
 

@@ -23,25 +23,9 @@ export class Tab3Page {
 
   loadProductsEvent(ev:any){
     console.log(ev.detail.value);
-    this.getAllProducts(ev.detail.value);
   }
 
-  getAllProducts(hotelId:any){
-    this.auth.getAllHotelProductsById(hotelId)
-    .subscribe({
-      next:async(value:any) =>{
-        console.log(value);
-      
-        let tranformedProducts = this.transformData(value['data']['content']);
-        console.log(tranformedProducts);
-        this.products = tranformedProducts;
-      },
-      error:async(error:HttpErrorResponse) =>{
-        console.log(error.error);
-        
-      }
-    })
-  }
+ 
 
   edit(){
     

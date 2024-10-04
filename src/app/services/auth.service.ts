@@ -42,7 +42,7 @@ export class AuthService {
 
 
   getPartnerById(){
-    return this.http.get(environment.URL + `partner/get/byId/${this.userId.value}`,{
+    return this.http.get(environment.URL + `partner/get-current-user?userId=${this.userId.value}`,{
       headers: {
         'x-access-token': this.accessToken.value,
       },})
@@ -137,7 +137,7 @@ export class AuthService {
       },})
   }
   getAllOrders(status:any){
-   return this.http.get(environment.URL + `partner/get/orders?hotelId=${this.shopId.value}&status=${status}&populate=1`,{
+   return this.http.get(environment.URL + `order/get-by/shopId/${this.shopId.value}`,{
       headers: {
         'x-access-token': this.accessToken.value,
       },})
@@ -180,14 +180,21 @@ export class AuthService {
     })
   }
 
-  getAllHotelProductsById(hotelId:any){
-    return this.http.get(environment.URL + `hotel/dish/get/${hotelId}`,{
+  getServiceById(serviceId:any){
+    return this.http.get(environment.URL + `partner/service/get/${serviceId}`,{
       headers:{
         'x-access-token': this.accessToken.value.toString()
       }
     })
   }
 
+  deleteServiceById(serviceId:any){
+    return this.http.delete(environment.URL + `partner/service/delete/${serviceId}`,{
+      headers:{
+        'x-access-token': this.accessToken.value.toString()
+      }
+    })
+  }
   getAllHotelsPartner(){
     return this.http.get(environment.URL + `partner/get/hotels/${this.userId.value.toString()}`,{
       headers:{

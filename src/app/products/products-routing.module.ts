@@ -13,7 +13,7 @@ const routes: Routes = [
     loadChildren: () => import('./view/view.module').then( m => m.ViewPageModule)
   },
   {
-    path: 'edit',
+    path: 'edit/:id',
     loadChildren: () => import('./edit/edit.module').then( m => m.EditPageModule)
   }
 ];

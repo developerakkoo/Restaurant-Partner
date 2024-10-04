@@ -1,7 +1,7 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, Input, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { LoadingController, ModalController, ToastController } from '@ionic/angular';
 import { AuthService } from 'src/app/services/auth.service';
 import { DataService } from 'src/app/services/data.service';
@@ -13,49 +13,29 @@ import { DataService } from 'src/app/services/data.service';
 })
 export class EditPage implements OnInit {
 
-  @Input() id:any;
+  id:any;
 
   shopId:any;
   serviceId:any;
   categories:any[] = [];
   isDishImageUploadModalOpen:boolean = false;
-  form!:FormGroup;
+  form:FormGroup;
   showPerPiecePrice = false;
   showPerKgPrice = false;
-  constructor(private modalController: ModalController,
+  constructor(
     private auth: AuthService,
+    private route:ActivatedRoute,
               private router: Router,
               private toastController: ToastController,
               private data:DataService,
               private fb: FormBuilder,
               private loadingController: LoadingController
   ) {
-    
-    this.loadCategory();
-    
-    
-  }
-  
-  ngOnInit() {
+    this.id = this.route.snapshot.paramMap.get("id");
     console.log(this.id);
-    this.createForm(this.id);
 
-
-    
-  }
-  ionViewDidEnter(){
-  }
-
-  close(){
-    this.modalController.dismiss();
-  }
-
-
-  async createForm(id:any){
-    console.log("Form Craeted");
-    
     this.form = this.fb.group({
-      shopeId:[id],
+      shopeId:[this.id],
      categoryId:['',[Validators.required]],
      type:['',[Validators.required]],
      name:['',[Validators.required]],
@@ -67,12 +47,20 @@ export class EditPage implements OnInit {
    })
    // Initialize visibility of fields based on quantityAcceptedIn's current value
    this.onQuantityChange({ detail: { value: this.form.get('quantityAcceptedIn')?.value || "" } });
-     
-      // Set the shopId in the form control
-      // this.form.patchValue({
-      //   shopeId: this.id
-      // });
+    this.loadCategory();
+    this.getServiceById();
+    
   }
+  
+  ngOnInit() {
+    
+
+
+    
+  }
+  ionViewDidEnter(){
+  }
+
 
 
   loadCategory(){
@@ -89,6 +77,40 @@ export class EditPage implements OnInit {
     })
   }
 
+  async getServiceById(){
+    this.auth.getServiceById(this.id)
+    .subscribe({
+      next:async(value:any) =>{
+        console.log(value['data']);
+        const responseData = {
+          shopeId: this.id,
+          categoryId: value['data']['categoryId'],
+          type: value['data']['type'],
+          name: value['data']['name'],
+          description: value['data']['description'],
+          quantityAcceptedIn: value['data']['quantityAcceptedIn'],
+          perPeacePrice: value['data']['perPeacePrice'],
+          perKgPrice: value['data']['perKgPrice']
+        };
+        
+        // Patch the form with the response data
+        this.form.patchValue({
+          shopeId: responseData.shopeId,
+          categoryId: responseData.categoryId,
+          type: responseData.type,
+          name: responseData.name,
+          description: responseData.description,
+          quantityAcceptedIn: responseData.quantityAcceptedIn,
+          perPeacePrice: responseData.perPeacePrice,
+          perKgPrice: responseData.perKgPrice
+        });
+      },
+      error:async(error:HttpErrorResponse) =>{
+        console.log(error);
+        
+      }
+    })
+  }
   async presentToast(msg:string, duration:any, color:any, position:any) {
     const toast = await this.toastController.create({
       message: msg,
