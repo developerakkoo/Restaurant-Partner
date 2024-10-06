@@ -44,20 +44,20 @@ export class ViewPage implements OnInit {
     })
 
     await loading.present();
-    this.auth.setHotelLiveStatus(status, hotelId)
-    .subscribe({
-      next:async(value:any) =>{
-        console.log(value);
+    // this.auth.setHotelLiveStatus(status, hotelId)
+    // .subscribe({
+    //   next:async(value:any) =>{
+    //     console.log(value);
        
-        await loading.dismiss();
-      },
-      error:async(error:HttpErrorResponse) =>{
-        console.log(error);
-        await loading.dismiss();
+    //     await loading.dismiss();
+    //   },
+    //   error:async(error:HttpErrorResponse) =>{
+    //     console.log(error);
+    //     await loading.dismiss();
 
         
-      }
-    })
+    //   }
+    // })
   }
   async getAllHotels(){
     let loading = await this.loadingController.create({

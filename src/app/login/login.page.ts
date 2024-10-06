@@ -70,8 +70,8 @@ export class LoginPage implements OnInit {
             await this.data.set("accessToken", accessToken);
             await this.data.set("refreshToken", refreshToken);
             this.presentToast("Logged In Successfully.",2000, 'success','bottom');
+            this.router.navigate(['','register']);
             }else if(value['data']['isRegistered'] === false){
-              this.router.navigate(['','register']);
 
             }
             await loading.dismiss();

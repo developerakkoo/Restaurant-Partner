@@ -79,17 +79,16 @@ export class AuthService {
         'x-access-token': this.accessToken.value,
       },})
   }
-  setHotelLiveStatus(isOnline:number, hotelId:any){
-    return this.http.put(environment.URL + `partner/hotel/update`,{
-      hotelId:hotelId,
-      isOnline:isOnline
+  setLaundryLiveStatus(isOpen:number, laundryId:any){
+    return this.http.put(environment.URL + `partner/shop/update/${laundryId}`,{
+      isOpen:isOpen
     },{
       headers: {
         'x-access-token': this.accessToken.value,
       },})
   }
   getPartnerDashboard(){
-    return this.http.get(environment.URL + `partner/get/dashboard/${this.userId.value}`,{
+    return this.http.get(environment.URL + `partner/dashboard/stats&shopId=${this.shopId.value}`,{
       headers: {
         'x-access-token': this.accessToken.value,
       },})
@@ -112,15 +111,7 @@ export class AuthService {
       },})
   }
 
-  markDishStockStatus(stock:number,dishId:string){
-    return this.http.put(environment.URL + `partner/hotel/dish/update`,{
-     dishId,
-     stock
-    },{
-      headers: {
-        'x-access-token': this.accessToken.value,
-      },})
-  }
+ 
 
   addService(body:any){
     return this.http.post(environment.URL + `partner/service/add`, body,{

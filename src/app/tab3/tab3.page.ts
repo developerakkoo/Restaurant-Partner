@@ -42,17 +42,17 @@ export class Tab3Page {
     else if(ev.detail.checked == false){
       stock = 0;
     }
-    this.auth.markDishStockStatus(stock,dishId)
-    .subscribe({
-      next:async(value:any) =>{
-        console.log(value);
+    // this.auth.markDishStockStatus(stock,dishId)
+    // .subscribe({
+    //   next:async(value:any) =>{
+    //     console.log(value);
         
-      },
-      error:async(error:HttpErrorResponse) =>{
-        console.log(error.error);
+    //   },
+    //   error:async(error:HttpErrorResponse) =>{
+    //     console.log(error.error);
         
-      }
-    })
+    //   }
+    // })
     
   }
   transformData(data:any) {
