@@ -1,12 +1,283 @@
-.container{
-    margin-top: 30px;
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
+// Header styling
+.header-icon {
+  margin-right: 8px;
+  vertical-align: middle;
 }
 
-.container p {
-    margin: 0;
+// Profile card
+.profile-card {
+  margin-bottom: 20px;
+  border-radius: 16px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+  background: linear-gradient(135deg, var(--ion-color-primary), var(--ion-color-primary-shade));
+  color: white;
+  text-align: center;
+
+  .profile-image-container {
+    position: relative;
+    display: inline-block;
+    margin-bottom: 20px;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+
+    &:hover {
+      transform: scale(1.05);
+    }
+
+    .profile-image {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      border: 4px solid rgba(255, 255, 255, 0.3);
+      object-fit: cover;
+      transition: border-color 0.2s ease;
+    }
+
+    .image-overlay {
+      position: absolute;
+      bottom: 0;
+      right: 0;
+      background: var(--ion-color-light);
+      border-radius: 50%;
+      width: 36px;
+      height: 36px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 3px solid white;
+      transition: all 0.2s ease;
+
+      .camera-icon {
+        color: var(--ion-color-dark);
+        font-size: 18px;
+      }
+
+      &:hover {
+        background: var(--ion-color-primary);
+        transform: scale(1.1);
+      }
+    }
+  }
+
+  .profile-info {
+    .profile-name {
+      margin: 0 0 8px 0;
+      font-size: 24px;
+      font-weight: 700;
+      color: white;
+    }
+
+    .profile-email {
+      margin: 0 0 16px 0;
+      font-size: 16px;
+      opacity: 0.9;
+      color: white;
+    }
+
+    .change-photo-btn {
+      --color: white;
+      --color-hover: var(--ion-color-light);
+      font-size: 14px;
+      font-weight: 500;
+      text-transform: none;
+      --padding-start: 16px;
+      --padding-end: 16px;
+      --border-radius: 20px;
+      --background: rgba(255, 255, 255, 0.2);
+      --background-hover: rgba(255, 255, 255, 0.3);
+
+      ion-icon {
+        margin-right: 4px;
+      }
+    }
+  }
+}
+
+// Options header card
+.options-header-card {
+  margin-bottom: 20px;
+  border-radius: 16px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+
+  ion-card-header {
+    background: var(--ion-color-light);
+    border-radius: 16px 16px 0 0;
+
+    ion-card-title {
+      font-size: 18px;
+      font-weight: 600;
+      color: var(--ion-color-dark);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+  }
+}
+
+// Option cards
+.option-card {
+  border-radius: 16px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+  margin-bottom: 16px;
+  transition: transform 0.2s ease;
+  --border-width: 2px;
+  --border-color: var(--ion-color-medium);
+
+  &:hover {
+    transform: translateY(-2px);
+    --border-color: var(--ion-color-primary);
+  }
+
+  .option-item {
+    --border-radius: 16px;
+    --background: var(--ion-color-light-tint);
+    --padding-start: 16px;
+    --padding-end: 16px;
+    --padding-top: 16px;
+    --padding-bottom: 16px;
+
+    .option-icon {
+      font-size: 24px;
+      margin-right: 16px;
+      transition: transform 0.2s ease;
+
+      &.profile-icon {
+        color: var(--ion-color-primary);
+      }
+
+      &.help-icon {
+        color: var(--ion-color-warning);
+      }
+
+      &.privacy-icon {
+        color: var(--ion-color-success);
+      }
+
+      &.notification-icon {
+        color: var(--ion-color-secondary);
+      }
+
+      &.language-icon {
+        color: var(--ion-color-tertiary);
+      }
+    }
+
+    &:hover {
+      .option-icon {
+        transform: scale(1.1);
+      }
+    }
+
+    ion-label {
+      h3 {
+        font-weight: 600;
+        color: var(--ion-color-dark);
+        margin: 0 0 4px 0;
+        font-size: 16px;
+      }
+
+      p {
+        color: var(--ion-color-medium);
+        margin: 0;
+        font-size: 14px;
+        line-height: 1.4;
+      }
+    }
+  }
+}
+
+// Logout button
+.logout-btn {
+  font-weight: 600;
+  font-size: 16px;
+  --padding-top: 16px;
+  --padding-bottom: 16px;
+  transition: all 0.2s ease;
+
+  &:hover {
+    --background: rgba(255, 255, 255, 0.1);
+    transform: translateY(-1px);
+  }
+
+  ion-icon {
+    margin-right: 8px;
+  }
+}
+
+// Responsive adjustments
+@media (max-width: 576px) {
+  .profile-card {
+    .profile-image-container {
+      .profile-image {
+        width: 100px;
+        height: 100px;
+      }
+
+      .image-overlay {
+        width: 32px;
+        height: 32px;
+
+        .camera-icon {
+          font-size: 16px;
+        }
+      }
+    }
+
+    .profile-info {
+      .profile-name {
+        font-size: 20px;
+      }
+
+      .profile-email {
+        font-size: 14px;
+      }
+    }
+  }
+
+  .option-card {
+    .option-item {
+      --padding-start: 12px;
+      --padding-end: 12px;
+      --padding-top: 12px;
+      --padding-bottom: 12px;
+
+      .option-icon {
+        font-size: 20px;
+        margin-right: 12px;
+      }
+
+      ion-label {
+        h3 {
+          font-size: 15px;
+        }
+
+        p {
+          font-size: 13px;
+        }
+      }
+    }
+  }
+}
+
+// Dark mode support
+@media (prefers-color-scheme: dark) {
+  .profile-card {
+    background: linear-gradient(135deg, var(--ion-color-primary), var(--ion-color-primary-tint));
+  }
+
+  .options-header-card {
+    ion-card-header {
+      background: var(--ion-color-dark);
+    }
+  }
+
+  .option-card {
+    .option-item {
+      --background: var(--ion-color-dark-tint);
+      
+      &:hover {
+        --background: var(--ion-color-dark);
+      }
+    }
+  }
 }

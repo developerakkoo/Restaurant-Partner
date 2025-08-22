@@ -11,46 +11,41 @@ import { Router } from '@angular/router';
   styleUrls: ['./tab5.page.scss'],
 })
 export class Tab5Page implements OnInit {
+  name: string = '';
+  email: string = '';
+  file!: File;
 
-  name:string = "";
-  email:string = "";
-  file!:File;
-
-  constructor(private auth: AuthService,
+  constructor(
+    private auth: AuthService,
     private data: DataService,
     private router: Router,
-              private loadingController: LoadingController
-  ) { }
+    private loadingController: LoadingController
+  ) {}
 
-  ngOnInit() {
-  }
+  ngOnInit() {}
 
-  fileEvent(ev:any){
+  fileEvent(ev: any) {
     console.log(ev.target.files[0]);
     this.file = ev.target.files[0];
-    
   }
-  ionViewDidEnter(){
+  ionViewDidEnter() {
     this.getPartnerById();
   }
-  getPartnerById(){
-    this.auth.getPartnerById()
-    .subscribe({
-      next:async(value:any) =>{
+  getPartnerById() {
+    this.auth.getPartnerById().subscribe({
+      next: async (value: any) => {
         console.log(value);
-        this.name = value['data'][0]['name'];
-        this.email = value['data'][0]['email'];
-        
+        this.name = value['data']['name'];
+        this.email = value['data']['email'];
       },
-      error:async(error:HttpErrorResponse) =>{
+      error: async (error: HttpErrorResponse) => {
         console.log(error.error);
-        
-      }
-    })
+      },
+    });
   }
 
-  async logout(){
+  async logout() {
     await this.data.clearAll();
-    this.router.navigate([''])
+    this.router.navigate(['']);
   }
 }

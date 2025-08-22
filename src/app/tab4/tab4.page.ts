@@ -9,138 +9,133 @@ import { HttpErrorResponse } from '@angular/common/http';
   styleUrls: ['./tab4.page.scss'],
 })
 export class Tab4Page implements OnInit {
+  status: any;
+  orders: any[] = [];
+  constructor(
+    private loadingController: LoadingController,
+    private auth: AuthService,
+    private actionSheetController: ActionSheetController
+  ) {}
 
-  status:any = 0;
-  orders:any[] = [];
-  constructor(private loadingController: LoadingController,
-              private auth:AuthService,
-              private actionSheetController: ActionSheetController
+  ngOnInit() {}
 
-  ) { }
-
-  ngOnInit() {
+  ionViewDidEnter() {
+    this.getAllOrders(0);
   }
-
-  ionViewDidEnter(){
-    this.getAllOrders();
-  }
-  segmentChanged(ev:any){
+  segmentChanged(ev: any) {
     console.log(ev.detail.value);
     this.status = ev.detail.value;
-    this.getAllOrders();
+    this.getAllOrders(this.status);
   }
 
-  async presentActionSheet(orderId:any) {
-   if(this.status == 0){
-    const actionSheet = await this.actionSheetController.create({
-      header: 'Albums',
-      buttons: [{
-        text: 'Accept',
-        role: '',
-        icon: 'checkmark',
-        handler: () => {
-          console.log('Delete clicked');
-          this.acceptOrder(orderId);
-        }
-      }, {
-        text: 'Reject',
-        icon: 'trash',
-        handler: () => {
-          console.log('Share clicked');
-          this.rejectOrder(orderId);
-        }
-      }, {
-        text: 'Cancel',
-        icon: 'close',
-        role: 'cancel',
-        handler: () => {
-          console.log('Cancel clicked');
-        }
-      }]
-    });
-  
-    await actionSheet.present();
-   }
-   else  if(this.status == 4){
-    const actionSheet = await this.actionSheetController.create({
-      header: 'Albums',
-      buttons: [{
-        text: 'Handed over to Delivery Boy',
-        role: '',
-        icon: 'checkmark',
-        handler: () => {
-          console.log('Delete clicked');
-          this.handedToDeliveryBoy(orderId,6);
-        }
-      }, {
-        text: 'Cancel',
-        icon: 'close',
-        role: 'cancel',
-        handler: () => {
-          console.log('Cancel clicked');
-        }
-      }]
-    });
-  
-    await actionSheet.present();
-   }
+  async presentActionSheet(orderId: any) {
+    if (this.status == 0) {
+      const actionSheet = await this.actionSheetController.create({
+        header: 'Albums',
+        buttons: [
+          {
+            text: 'Accept',
+            role: '',
+            icon: 'checkmark',
+            handler: () => {
+              console.log('Accept ORder And Asssign 1');
+              this.orderChangeStatus(orderId, 1);
+            },
+          },
+          {
+            text: 'Reject',
+            icon: 'trash',
+            handler: () => {
+              console.log('Reject Order and Assign 8');
+              this.orderChangeStatus(orderId, 8);
+              
+            },
+          },
+          {
+            text: 'Cancel',
+            icon: 'close',
+            role: 'cancel',
+            handler: () => {
+              console.log('Cancel clicked');
+            },
+          },
+        ],
+      });
+
+      await actionSheet.present();
+    } else if (this.status == 4) {
+      const actionSheet = await this.actionSheetController.create({
+        header: 'Albums',
+        buttons: [
+          {
+            text: 'Handed over to Delivery Boy',
+            role: '',
+            icon: 'checkmark',
+            handler: () => {
+              console.log('Delete clicked');
+              this.handedToDeliveryBoy(orderId, 6);
+            },
+          },
+          {
+            text: 'Cancel',
+            icon: 'close',
+            role: 'cancel',
+            handler: () => {
+              console.log('Cancel clicked');
+            },
+          },
+        ],
+      });
+
+      await actionSheet.present();
+    }
   }
 
-  handedToDeliveryBoy(orderId:any, status:any){
-    this.auth.updateOrderStatus(orderId, status)
-    .subscribe({
-      next:async(value:any) =>{
+  handedToDeliveryBoy(orderId: any, status: any) {
+    this.auth.updateOrderStatus(orderId, status).subscribe({
+      next: async (value: any) => {
         console.log(value);
-        this.getAllOrders();
+        this.getAllOrders(0);
       },
-      error:async(error:HttpErrorResponse) =>{
+      error: async (error: HttpErrorResponse) => {
         console.log(error.error);
-        
-      }
-    })
+      },
+    });
   }
 
-  getAllOrders(){
-    this.auth.getAllOrders(this.status)
-    .subscribe({
-      next:async(value:any) =>{
+  getAllOrders(status:any) {
+    this.auth.getAllOrders(status).subscribe({
+      next: async (value: any) => {
         console.log(value);
         this.orders = value['data']['content'];
       },
-      error:async(error:HttpErrorResponse) =>{
+      error: async (error: HttpErrorResponse) => {
         console.log(error.error);
-        
-      }
-    })
+      },
+    });
   }
 
-  acceptOrder(orderId:any){
-    this.auth.AcceptRejectOrder(orderId, 4)
-    .subscribe({
-      next:async(value:any) =>{
+  orderChangeStatus(orderId: any, status: any) {
+    this.auth.AcceptRejectOrder(orderId, status).subscribe({
+      next: async (value: any) => {
         console.log(value);
-        this.getAllOrders();
+        this.getAllOrders(0);
       },
-      error:async(error:HttpErrorResponse) =>{
+      error: async (error: HttpErrorResponse) => {
         console.log(error.error);
-        
-      }
-    })
+      },
+    });
   }
 
-
-  rejectOrder(orderId:any){
-    this.auth.AcceptRejectOrder(orderId, 5)
-    .subscribe({
-      next:async(value:any) =>{
+  rejectOrder(orderId: any) {
+    this.auth.AcceptRejectOrder(orderId, 8).subscribe({
+      next: async (value: any) => {
         console.log(value);
-        this.getAllOrders();
-        
+        this.getAllOrders(0);
       },
-      error:async(error:HttpErrorResponse) =>{
+      error: async (error: HttpErrorResponse) => {
         console.log(error.error);
-        
-      }
-    })
+      },
+    });
   }
 }

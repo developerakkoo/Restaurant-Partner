@@ -34,7 +34,7 @@ export class ProfilePage implements OnInit {
     .subscribe({
       next:(value:any) =>{
         console.log(value);
-        this.form.patchValue({email: value['data'][0]['email'], name: value['data'][0]['name'], phoneNumber:value['data'][0]['phoneNumber']});
+        this.form.patchValue({email: value['data']['email'], name: value['data']['name'], phoneNumber:value['data']['phoneNumber']});
       },
       error:(error:HttpErrorResponse) =>{
         console.log(error.error);

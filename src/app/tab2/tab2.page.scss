@@ -1,0 +1,235 @@
+// Header styling
+.header-icon {
+  margin-right: 8px;
+  vertical-align: middle;
+}
+
+// Date range card
+.date-range-card {
+  margin-bottom: 20px;
+  border-radius: 16px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+
+  ion-card-header {
+    background: linear-gradient(135deg, var(--ion-color-primary), var(--ion-color-primary-shade));
+    color: white;
+    border-radius: 16px 16px 0 0;
+
+    ion-card-title {
+      font-size: 18px;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+  }
+
+  .date-input {
+    --border-radius: 12px;
+    --border-width: 2px;
+    --border-color: var(--ion-color-medium);
+    --border-style: solid;
+    margin: 8px 0;
+    
+    &:hover {
+      --border-color: var(--ion-color-primary);
+    }
+
+    ion-label {
+      font-weight: 600;
+      color: var(--ion-color-dark);
+    }
+  }
+}
+
+// Summary cards
+.summary-card {
+  border-radius: 16px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+  margin-bottom: 20px;
+  transition: transform 0.2s ease;
+
+  &:hover {
+    transform: translateY(-2px);
+  }
+
+  &.total-earnings {
+    --background: linear-gradient(135deg, #4CAF50, #45a049);
+    color: white;
+  }
+
+  &.order-count {
+    --background: linear-gradient(135deg, #2196F3, #1976D2);
+    color: white;
+  }
+
+  .summary-content {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+
+    .summary-icon {
+      font-size: 32px;
+      opacity: 0.9;
+    }
+
+    .summary-text {
+      h3 {
+        margin: 0 0 4px 0;
+        font-size: 14px;
+        font-weight: 500;
+        opacity: 0.9;
+      }
+
+      h2 {
+        margin: 0;
+        font-size: 24px;
+        font-weight: 700;
+      }
+    }
+  }
+}
+
+// No data card
+.no-data-card {
+  border-radius: 16px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+  margin: 40px 0;
+  text-align: center;
+
+  .no-data-icon {
+    font-size: 64px;
+    color: var(--ion-color-medium);
+    margin-bottom: 16px;
+  }
+
+  h2 {
+    color: var(--ion-color-dark);
+    font-weight: 600;
+    margin: 16px 0 8px 0;
+  }
+
+  p {
+    color: var(--ion-color-medium);
+    margin: 0;
+    font-size: 16px;
+  }
+}
+
+// Earnings list card
+.earnings-list-card {
+  border-radius: 16px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+
+  ion-card-header {
+    background: var(--ion-color-light);
+    border-radius: 16px 16px 0 0;
+
+    ion-card-title {
+      font-size: 18px;
+      font-weight: 600;
+      color: var(--ion-color-dark);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+  }
+
+  .earning-item {
+    --border-radius: 12px;
+    margin: 8px 0;
+    --background: var(--ion-color-light-tint);
+    border-radius: 12px;
+
+    &:hover {
+      --background: var(--ion-color-light);
+    }
+
+    .date-icon {
+      color: var(--ion-color-primary);
+      font-size: 20px;
+    }
+
+    ion-label {
+      h3 {
+        font-weight: 600;
+        color: var(--ion-color-dark);
+        margin: 0 0 4px 0;
+        font-size: 16px;
+      }
+
+      p {
+        color: var(--ion-color-medium);
+        margin: 0;
+        font-size: 14px;
+      }
+    }
+
+    .earnings-badge {
+      font-size: 16px;
+      font-weight: 600;
+      padding: 8px 12px;
+      border-radius: 20px;
+    }
+  }
+}
+
+// Responsive adjustments
+@media (max-width: 576px) {
+  .summary-card {
+    .summary-content {
+      flex-direction: column;
+      text-align: center;
+      gap: 12px;
+
+      .summary-text {
+        h2 {
+          font-size: 20px;
+        }
+      }
+    }
+  }
+
+  .date-range-card {
+    ion-grid {
+      ion-row {
+        ion-col {
+          size: 12;
+        }
+      }
+    }
+  }
+}
+
+// Dark mode support
+@media (prefers-color-scheme: dark) {
+  .date-range-card {
+    ion-card-header {
+      background: linear-gradient(135deg, var(--ion-color-primary), var(--ion-color-primary-tint));
+    }
+  }
+
+  .summary-card {
+    &.total-earnings {
+      --background: linear-gradient(135deg, #388E3C, #2E7D32);
+    }
+
+    &.order-count {
+      --background: linear-gradient(135deg, #1565C0, #0D47A1);
+    }
+  }
+
+  .earnings-list-card {
+    ion-card-header {
+      background: var(--ion-color-dark);
+    }
+
+    .earning-item {
+      --background: var(--ion-color-dark-tint);
+      
+      &:hover {
+        --background: var(--ion-color-dark);
+      }
+    }
+  }
+}

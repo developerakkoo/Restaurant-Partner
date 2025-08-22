@@ -5,44 +5,77 @@
 </ion-header>
 
 <ion-content [fullscreen]="true" class="ion-padding">
- <ion-segment value="0" (ionChange)="segmentChanged($event)" mode="ios">
-  <ion-segment-button value="0">
-    <ion-label>Received</ion-label>
-  </ion-segment-button>
-  <ion-segment-button value="4">
-    <ion-label>Preparing</ion-label>
-  </ion-segment-button>
-  <ion-segment-button value="5">
-    <ion-label>Rejected Order</ion-label>
-  </ion-segment-button>
- </ion-segment>
+  <ion-segment value="0" (ionChange)="segmentChanged($event)" mode="ios">
+    <ion-segment-button value="0">
+      <ion-label>Received</ion-label>
+    </ion-segment-button>
+    <ion-segment-button value="3">
+      <ion-label>Arriving</ion-label>
+    </ion-segment-button>
+    <ion-segment-button value="7">
+      <ion-label>Completed Order</ion-label>
+    </ion-segment-button>
+  </ion-segment>
 
- <ion-text color="primary" class="ion-text-center" *ngIf="orders.length == 0">
-  <h1>No Orders!</h1>
- </ion-text>
+  <ion-text color="primary" class="ion-text-center" *ngIf="orders.length == 0">
+    <h1>No Orders!</h1>
+  </ion-text>
 
- <ion-list *ngIf="orders.length > 0">
-  <ion-list-header>
-    <ion-label>All Orders here</ion-label>
-  </ion-list-header>
+  <ion-list *ngIf="orders.length > 0">
+    <ion-list-header>
+      <ion-label>All Orders here</ion-label>
+    </ion-list-header>
 
-  <ion-card *ngFor="let item of orders" (click)="presentActionSheet(item._id)">
-    <ion-card-header>
-      <ion-card-subtitle>Order By:- {{item.user.name}}</ion-card-subtitle>
-      <ion-card-title> Order ID: {{item.orderId}}</ion-card-title>
-    </ion-card-header>
-    <ion-card-content>
-      <ion-item *ngFor="let p of item.productDetails">
-        <ion-avatar slot="start">
-          <img crossorigin="anonymous" [src]="p.image_url" />
-        </ion-avatar>
-        <ion-label>{{p.name}}
+    <ion-card
+      *ngFor="let item of orders"
+      (click)="presentActionSheet(item._id)"
+    >
+      <ion-card-header>
+        <ion-card-subtitle
+          >Order By:- {{item.userId.phoneNumber}}</ion-card-subtitle
+        >
+        <ion-card-title> Order ID: {{item.orderId}}</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <ion-item *ngFor="let p of item.items">
+          <ion-avatar slot="start">
+            <img crossorigin="anonymous" [src]="p.serviceId.image_url" />
+          </ion-avatar>
+          <ion-label
+            >{{p.serviceId.name}}
 
-          <p> {{p.partnerPrice | currency:"INR"}} </p>
-        </ion-label>
-      </ion-item>
-    </ion-card-content>
-  </ion-card>
+            <p>{{p.serviceId.perKgPrice | currency:"INR"}}</p>
+          </ion-label>
+        </ion-item>
+        <ion-button
+          *ngIf="item.status == 0"
+          (click)="orderChangeStatus(item._id,1)"
+          expand="block"
+          fill="solid"
+          shape="round"
+        >
+          Accept
+        </ion-button>
+        <ion-button
+          *ngIf="item.status == 3"
+          (click)="orderChangeStatus(item._id,4)"
+          expand="block"
+          fill="solid"
+          shape="round"
+        >
+          Confirm Order Received
+        </ion-button>
 
-</ion-list>
+        <ion-button
+          *ngIf="item.status == 4"
+          (click)="orderChangeStatus(item._id,5)"
+          expand="block"
+          fill="solid"
+          shape="round"
+        >
+          Confirm Order is Ready
+        </ion-button>
+      </ion-card-content>
+    </ion-card>
+  </ion-list>
 </ion-content>

@@ -1,34 +1,119 @@
 <ion-header [translucent]="true" class="ion-no-border">
-  <ion-toolbar>
+  <ion-toolbar color="primary">
     <ion-title class="ion-text-center">
-      Earnings
+      <ion-icon name="cash-outline" class="header-icon"></ion-icon>
+      Partner Earnings
     </ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true" class="ion-padding">
- <ion-grid fixed>
-  <ion-row>
-    <ion-col size="6">
-      <ion-input (ionChange)="setStartDate($event)" [(ngModel)]="startDate" fill="outline" label="Start date" labelPlacement="stacked" type="date" placeholder="Awesome Input"></ion-input>
-    </ion-col>
-    <ion-col size="6">
-      <ion-input (ionChange)="setEndDate($event)" [(ngModel)]="endDate" fill="outline" label="End date" labelPlacement="stacked" type="date" placeholder="Awesome Input"></ion-input>
+  <!-- Date Range Card -->
+  <ion-card class="date-range-card">
+    <ion-card-header>
+      <ion-card-title>
+        <ion-icon name="calendar-outline"></ion-icon>
+        Select Date Range
+      </ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <ion-grid>
+        <ion-row>
+          <ion-col size="6">
+            <ion-item fill="outline" class="date-input">
+              <ion-label position="stacked">Start Date</ion-label>
+              <ion-input
+                (ionChange)="setStartDate($event)"
+                [(ngModel)]="startDate"
+                type="date"
+                placeholder="Select start date"
+              >
+              </ion-input>
+            </ion-item>
+          </ion-col>
+          <ion-col size="6">
+            <ion-item fill="outline" class="date-input">
+              <ion-label position="stacked">End Date</ion-label>
+              <ion-input
+                (ionChange)="setEndDate($event)"
+                [(ngModel)]="endDate"
+                type="date"
+                placeholder="Select end date"
+              >
+              </ion-input>
+            </ion-item>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </ion-card-content>
+  </ion-card>
 
-    </ion-col>
-  </ion-row>
- </ion-grid>
+  <!-- Summary Cards -->
+  <ion-grid *ngIf="earnings.length > 0">
+    <ion-row>
+      <ion-col size="6">
+        <ion-card class="summary-card total-earnings">
+          <ion-card-content>
+            <div class="summary-content">
+              <ion-icon name="wallet-outline" class="summary-icon"></ion-icon>
+              <div class="summary-text">
+                <h3>Total Earnings</h3>
+                <h2>{{getTotalEarnings() | currency:'INR'}}</h2>
+              </div>
+            </div>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+      <ion-col size="6">
+        <ion-card class="summary-card order-count">
+          <ion-card-content>
+            <div class="summary-content">
+              <ion-icon name="list-outline" class="summary-icon"></ion-icon>
+              <div class="summary-text">
+                <h3>Total Orders</h3>
+                <h2>{{earnings.length}}</h2>
+              </div>
+            </div>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
 
- <ion-text color="primary" *ngIf="earnings.length == 0" class="ion-text-center">
-  <h1>Not data!</h1>
- </ion-text>
- <ion-list *ngIf="earnings.length > 0">
-  <ion-list-header>
-    <ion-label>All Earnings</ion-label>
-  </ion-list-header>
-  <ion-item lines="none" *ngFor="let ear of earnings">
-    <ion-label>{{ear.date | date:"fullDate"}}</ion-label>
-    <ion-badge class="ion-padding" color="primary" mode="ios"> {{ear.earnings | currency:"INR"}} </ion-badge>
-  </ion-item>
- </ion-list>
+  <!-- No Data Message -->
+  <ion-card *ngIf="earnings.length == 0" class="no-data-card">
+    <ion-card-content class="ion-text-center">
+      <ion-icon name="document-outline" class="no-data-icon"></ion-icon>
+      <h2>No Earnings Data</h2>
+      <p>Select a date range to view your earnings</p>
+    </ion-card-content>
+  </ion-card>
+
+  <!-- Earnings List -->
+  <ion-card *ngIf="earnings.length > 0" class="earnings-list-card">
+    <ion-card-header>
+      <ion-card-title>
+        <ion-icon name="trending-up-outline"></ion-icon>
+        Daily Earnings Breakdown
+      </ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <ion-list lines="full">
+        <ion-item *ngFor="let ear of earnings" class="earning-item">
+          <ion-icon
+            name="calendar-outline"
+            slot="start"
+            class="date-icon"
+          ></ion-icon>
+          <ion-label>
+            <h3>{{ear.date | date:"EEEE, MMMM d"}}</h3>
+            <p>{{ear.date | date:"MMMM yyyy"}}</p>
+          </ion-label>
+          <ion-badge slot="end" color="success" class="earnings-badge">
+            {{ear.earnings | currency:'INR'}}
+          </ion-badge>
+        </ion-item>
+      </ion-list>
+    </ion-card-content>
+  </ion-card>
 </ion-content>

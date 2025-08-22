@@ -1,40 +1,147 @@
 <ion-header [translucent]="true" class="ion-no-border">
-  <ion-toolbar>
-    <ion-title class="ion-text-center">Account</ion-title>
+  <ion-toolbar color="primary">
+    <ion-title class="ion-text-center">
+      <ion-icon name="person-circle-outline" class="header-icon"></ion-icon>
+      Account
+    </ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true" class="ion-padding">
-  <div class="container">
-    <div class="image-container">
-      <img (click)="f.click()" src="assets/Avatar.svg" alt="">
-    </div>
-    <input hidden #f type="file" name="" (change)="fileEvent($event)" id="">
-    <p>{{name || "..."}}</p>
-    <p> {{email || "..."}} </p>
-  </div>
- <ion-list>
-  <ion-card>
-    <ion-item detail="true" routerLink="/profile">
-      <ion-icon name="person-outline" slot="start"></ion-icon>
-      <ion-label>Edit Profile Information</ion-label>
-    </ion-item>
-    <ion-item detail="true">
-      <ion-icon name="person-outline" slot="start"></ion-icon>
-      <ion-label>Help & Support</ion-label>
-    </ion-item>
-    <ion-item detail="true">
-      <ion-icon name="person-outline" slot="start"></ion-icon>
-      <ion-label>Privacy Policy</ion-label>
+  <!-- Profile Section -->
+  <ion-card class="profile-card">
+    <ion-card-content class="ion-text-center">
+      <div class="profile-image-container">
+        <img
+          (click)="f.click()"
+          src="assets/Avatar.svg"
+          alt="Profile Picture"
+          class="profile-image"
+        />
+        <div class="image-overlay">
+          <ion-icon name="camera-outline" class="camera-icon"></ion-icon>
+        </div>
+      </div>
+      <input
+        hidden
+        #f
+        type="file"
+        name="profile-picture"
+        (change)="fileEvent($event)"
+        id="profile-picture"
+        accept="image/*"
+      />
+
+      <div class="profile-info">
+        <h2 class="profile-name">{{name || "Loading..."}}</h2>
+        <p class="profile-email">{{email || "Loading..."}}</p>
+        <ion-button
+          fill="clear"
+          size="small"
+          (click)="f.click()"
+          class="change-photo-btn"
+        >
+          <ion-icon name="create-outline" slot="start"></ion-icon>
+          Change Photo
+        </ion-button>
+      </div>
+    </ion-card-content>
+  </ion-card>
+
+  <!-- Account Options -->
+  <ion-card class="options-header-card">
+    <ion-card-header>
+      <ion-card-title>
+        <ion-icon name="settings-outline"></ion-icon>
+        Account Settings
+      </ion-card-title>
+    </ion-card-header>
+  </ion-card>
+
+  <ion-card class="option-card">
+    <ion-item detail="true" routerLink="/profile" class="option-item">
+      <ion-icon
+        name="person-outline"
+        slot="start"
+        class="option-icon profile-icon"
+      ></ion-icon>
+      <ion-label>
+        <h3>Edit Profile Information</h3>
+        <p>Update your personal details and preferences</p>
+      </ion-label>
     </ion-item>
   </ion-card>
- </ion-list>
+
+  <ion-card class="option-card">
+    <ion-item detail="true" class="option-item">
+      <ion-icon
+        name="help-circle-outline"
+        slot="start"
+        class="option-icon help-icon"
+      ></ion-icon>
+      <ion-label>
+        <h3>Help & Support</h3>
+        <p>Get help and contact customer support</p>
+      </ion-label>
+    </ion-item>
+  </ion-card>
+
+  <ion-card class="option-card">
+    <ion-item detail="true" class="option-item">
+      <ion-icon
+        name="shield-checkmark-outline"
+        slot="start"
+        class="option-icon privacy-icon"
+      ></ion-icon>
+      <ion-label>
+        <h3>Privacy Policy</h3>
+        <p>Read our privacy and data protection policy</p>
+      </ion-label>
+    </ion-item>
+  </ion-card>
+
+  <!-- Additional Options -->
+  <ion-card class="option-card">
+    <ion-item detail="true" class="option-item">
+      <ion-icon
+        name="notifications-outline"
+        slot="start"
+        class="option-icon notification-icon"
+      ></ion-icon>
+      <ion-label>
+        <h3>Notification Settings</h3>
+        <p>Manage your notification preferences</p>
+      </ion-label>
+    </ion-item>
+  </ion-card>
+
+  <ion-card class="option-card">
+    <ion-item detail="true" class="option-item">
+      <ion-icon
+        name="language-outline"
+        slot="start"
+        class="option-icon language-icon"
+      ></ion-icon>
+      <ion-label>
+        <h3>Language & Region</h3>
+        <p>Set your preferred language and region</p>
+      </ion-label>
+    </ion-item>
+  </ion-card>
 </ion-content>
 
 <ion-footer>
   <ion-toolbar color="primary">
-   <ion-button color="light" (click)="logout()" expand="block" fill="clear" shape="round">
-    LOGOUT
-   </ion-button>
+    <ion-button
+      color="light"
+      (click)="logout()"
+      expand="block"
+      fill="clear"
+      shape="round"
+      class="logout-btn"
+    >
+      <ion-icon name="log-out-outline" slot="start"></ion-icon>
+      LOGOUT
+    </ion-button>
   </ion-toolbar>
 </ion-footer>
