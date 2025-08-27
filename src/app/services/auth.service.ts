@@ -12,6 +12,7 @@ export class AuthService {
   accessToken: BehaviorSubject<string> = new BehaviorSubject('');
   userId: BehaviorSubject<string> = new BehaviorSubject('');
   shopId: BehaviorSubject<string> = new BehaviorSubject('');
+  shopData: BehaviorSubject<string> = new BehaviorSubject('');
   address: BehaviorSubject<string> = new BehaviorSubject('');
   constructor(private http: HttpClient, private storage: DataService) {
     this.init();
@@ -20,10 +21,12 @@ export class AuthService {
     let token = await this.storage.get('accessToken');
     let userId = await this.storage.get('userId');
     let shopId = await this.storage.get('shopId');
+    let shopData = await this.storage.get('shopData');
 
     this.accessToken.next(token);
     this.userId.next(userId);
     this.shopId.next(shopId);
+    this.shopData.next(shopData);
   }
 
   register(body: {}) {
@@ -110,7 +113,7 @@ export class AuthService {
   }
   getPartnerDashboard() {
     return this.http.get(
-      environment.URL + `partner/dashboard/stats&shopId=${this.shopId.value}`,
+      environment.URL + `partner/dashboard/stats?shopId=${this.shopId.value}`,
       {
         headers: {
           'x-access-token': this.accessToken.value,
@@ -122,7 +125,7 @@ export class AuthService {
   getPartnerEarnings(startDate: any, endDate: any) {
     return this.http.get(
       environment.URL +
-        `partner/get/earnings/${this.userId.value}?startDate=${startDate}&endDate=${endDate}`,
+        `partner/get/earnings/${this.userId.value}?startDate=${startDate}?endDate=${endDate}`,
       {
         headers: {
           'x-access-token': this.accessToken.value,

@@ -12,12 +12,14 @@ import { Socket } from 'ngx-socket-io';
   styleUrls: ['tab1.page.scss'],
 })
 export class Tab1Page {
-  restaurantName: string = 'Akshay Laundry';
+  restaurantName: string = '';
   weeklyRevenue: any = 0;
-  monthlyRevenue: any = 230;
+  monthlyRevenue: any = 0;
   monthlyOrders: any = 4;
   todaysOrders: any = 0;
-  totalOrders: any = 4;
+  todaysRevenue: any = 0;
+  totalOrders: any = 0;
+  totalRevenue: any = 0;
 
   constructor(
     private router: Router,
@@ -28,7 +30,14 @@ export class Tab1Page {
   ) {}
 
   ionViewDidEnter() {
-    // this.getAnalyticsData();
+    this.auth.shopData.subscribe((res: any) => {
+      if (res) {
+        console.log(res);
+
+        this.restaurantName = res['name'];
+      }
+    });
+    this.getAnalyticsData();
   }
 
   getAnalyticsData() {
@@ -36,10 +45,17 @@ export class Tab1Page {
       next: async (value: any) => {
         console.log(value);
         let data = value['data'];
-        // this.dishInStock = data['dishInStock'];
-        // this.todaysOrders = data['todaysOrders'];
-        // this.monthlyOrders = data['monthlyOrder'];
-        // this.dishOutOfStock = data['dishOutOfStock'];
+        this.monthlyRevenue = value['data']['monthlyRevenue'];
+
+        this.todaysOrders = data['todaysOrders'];
+
+        this.todaysRevenue = data['todaysRevenue'];
+
+        this.totalOrders = data['totalOrders'];
+
+        this.totalRevenue = data['totalRevenue'];
+
+        this.weeklyRevenue = data['weeklyRevenue'];
       },
       error: async (error: HttpErrorResponse) => {
         console.log(error.error);
@@ -47,8 +63,8 @@ export class Tab1Page {
     });
   }
 
-  changeWorkingStatus(ev: any) {
-    console.log(ev);
+  hotelOnlineToggleEvent(ev: any) {
+    console.log(ev.detail.checked);
   }
 
   openPage(pageName: string) {

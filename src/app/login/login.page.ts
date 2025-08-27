@@ -64,9 +64,10 @@ export class LoginPage implements OnInit {
             let shopId = value['data']['shop']['_id'];
             let accessToken = value['data']['accessToken'];
             let refreshToken = value['data']['refreshToken'];
-
+            let shopData = value['data']['shop'];
             await this.data.set('userId', userId);
             await this.data.set('shopId', shopId);
+            await this.data.set('shopData', shopData);
             await this.data.set('accessToken', accessToken);
             await this.data.set('refreshToken', refreshToken);
             this.presentToast(

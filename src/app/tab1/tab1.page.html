@@ -12,6 +12,11 @@
     >
       <ion-icon slot="icon-only" name="notifications-outline"></ion-icon>
     </ion-button>
+    <ion-toggle
+      slot="end"
+      class="ion-padding"
+      (ionChange)="hotelOnlineToggleEvent($event)"
+    ></ion-toggle>
   </ion-toolbar>
 </ion-header>
 
