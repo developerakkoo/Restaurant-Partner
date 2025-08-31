@@ -15,12 +15,23 @@
     <ion-toggle
       slot="end"
       class="ion-padding"
+      [(ngModel)]="isShopOpen"
       (ionChange)="hotelOnlineToggleEvent($event)"
     ></ion-toggle>
   </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true" class="ion-padding">
+  <ion-refresher slot="fixed" (ionRefresh)="handleRefresh($event)">
+    <ion-refresher-content
+      pullingIcon="chevron-down-circle-outline"
+      pullingText="Pull to refresh"
+      refreshingSpinner="circles"
+      refreshingText="Refreshing..."
+    >
+    </ion-refresher-content>
+  </ion-refresher>
+
   <!-- Welcome Section -->
   <ion-card class="welcome-card">
     <ion-card-content class="ion-text-center">
@@ -72,7 +83,21 @@
     </ion-row>
 
     <ion-row>
-      <ion-col size="12">
+      <ion-col size="6">
+        <ion-card class="stat-card total-revenue">
+          <ion-card-content>
+            <div class="stat-content">
+              <ion-icon name="wallet-outline" class="stat-icon"></ion-icon>
+              <div class="stat-text">
+                <h3>Total Revenue</h3>
+                <h2>{{totalRevenue || 0 | currency:'INR'}}</h2>
+              </div>
+            </div>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+
+      <ion-col size="6">
         <ion-card class="stat-card monthly-revenue">
           <ion-card-content>
             <div class="stat-content">
@@ -103,6 +128,29 @@
       </ion-col>
     </ion-row>
   </ion-grid>
+
+  <!-- Weekly Breakdown -->
+  <ion-card class="weekly-breakdown-card" *ngIf="weeklyStats.length > 0">
+    <ion-card-header>
+      <ion-card-title>
+        <ion-icon name="calendar-outline"></ion-icon>
+        Weekly Breakdown
+      </ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <ion-list>
+        <ion-item *ngFor="let day of weeklyStats">
+          <ion-label>
+            <h3>{{day.day}}</h3>
+            <p>{{day.totalOrders}} orders</p>
+          </ion-label>
+          <ion-badge slot="end" color="success">
+            {{day.totalEarnings | currency:'INR'}}
+          </ion-badge>
+        </ion-item>
+      </ion-list>
+    </ion-card-content>
+  </ion-card>
 
   <!-- Quick Actions -->
   <ion-card class="actions-header-card">

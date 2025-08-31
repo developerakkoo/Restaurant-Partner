@@ -111,6 +111,32 @@ export class AuthService {
       }
     );
   }
+
+  updateShopStatus(isOpen: boolean) {
+    return this.http.put(
+      environment.URL + `partner/shop/update/${this.shopId.value}`,
+      {
+        isOpen: isOpen,
+      },
+      {
+        headers: {
+          'x-access-token': this.accessToken.value,
+        },
+      }
+    );
+  }
+
+  // Get shop data to check current status
+  getShopData() {
+    return this.http.get(
+      environment.URL + `partner/shop/${this.shopId.value}`,
+      {
+        headers: {
+          'x-access-token': this.accessToken.value,
+        },
+      }
+    );
+  }
   getPartnerDashboard() {
     return this.http.get(
       environment.URL + `partner/dashboard/stats?shopId=${this.shopId.value}`,

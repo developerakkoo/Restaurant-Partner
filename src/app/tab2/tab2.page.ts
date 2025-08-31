@@ -61,4 +61,16 @@ export class Tab2Page {
       0
     );
   }
+
+  handleRefresh(event: any) {
+    console.log('Refreshing earnings data...');
+
+    // Refresh earnings data
+    this.getEarningsData();
+
+    // Complete the refresh after a short delay to show the loading state
+    setTimeout(() => {
+      event.target.complete();
+    }, 1000);
+  }
 }

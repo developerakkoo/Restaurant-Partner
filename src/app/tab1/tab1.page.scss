@@ -88,6 +88,11 @@
     color: white;
   }
 
+  &.total-revenue {
+    --background: linear-gradient(135deg, #FF5722, #D84315);
+    color: white;
+  }
+
   &.monthly-revenue {
     --background: linear-gradient(135deg, #4CAF50, #45a049);
     color: white;
@@ -120,6 +125,59 @@
         margin: 0;
         font-size: 24px;
         font-weight: 700;
+      }
+    }
+  }
+}
+
+// Weekly breakdown card
+.weekly-breakdown-card {
+  margin-bottom: 20px;
+  border-radius: 16px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+
+  ion-card-header {
+    background: var(--ion-color-light);
+    border-radius: 16px 16px 0 0;
+
+    ion-card-title {
+      font-size: 18px;
+      font-weight: 600;
+      color: var(--ion-color-dark);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+  }
+
+  ion-list {
+    ion-item {
+      --border-radius: 8px;
+      margin-bottom: 8px;
+      --background: var(--ion-color-light-tint);
+
+      &:last-child {
+        margin-bottom: 0;
+      }
+
+      ion-label {
+        h3 {
+          font-weight: 600;
+          color: var(--ion-color-dark);
+          margin: 0 0 4px 0;
+          font-size: 16px;
+        }
+
+        p {
+          color: var(--ion-color-medium);
+          margin: 0;
+          font-size: 14px;
+        }
+      }
+
+      ion-badge {
+        font-weight: 600;
+        font-size: 14px;
       }
     }
   }
@@ -236,6 +294,10 @@
       --background: linear-gradient(135deg, #6A1B9A, #4A148C);
     }
 
+    &.total-revenue {
+      --background: linear-gradient(135deg, #BF360C, #8D2F0A);
+    }
+
     &.monthly-revenue {
       --background: linear-gradient(135deg, #388E3C, #2E7D32);
     }
@@ -246,7 +308,8 @@
   }
 
   .dashboard-header-card,
-  .actions-header-card {
+  .actions-header-card,
+  .weekly-breakdown-card {
     ion-card-header {
       background: var(--ion-color-dark);
     }
@@ -255,6 +318,14 @@
   .action-card {
     .action-item {
       --background: var(--ion-color-dark-tint);
+    }
+  }
+
+  .weekly-breakdown-card {
+    ion-list {
+      ion-item {
+        --background: var(--ion-color-dark-tint);
+      }
     }
   }
 }

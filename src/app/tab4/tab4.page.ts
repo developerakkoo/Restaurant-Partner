@@ -9,8 +9,9 @@ import { HttpErrorResponse } from '@angular/common/http';
   styleUrls: ['./tab4.page.scss'],
 })
 export class Tab4Page implements OnInit {
-  status: any;
-  orders: any[] = [];
+  status: any = 0; // Default to 0 (Received)
+  allOrders: any[] = []; // Store all orders
+  orders: any[] = []; // Filtered orders to display
   constructor(
     private loadingController: LoadingController,
     private auth: AuthService,
@@ -20,12 +21,46 @@ export class Tab4Page implements OnInit {
   ngOnInit() {}
 
   ionViewDidEnter() {
-    this.getAllOrders(0);
+    this.getAllOrders();
   }
+
   segmentChanged(ev: any) {
-    console.log(ev.detail.value);
-    this.status = ev.detail.value;
-    this.getAllOrders(this.status);
+    console.log('Segment changed to:', ev.detail.value);
+    this.status = parseInt(ev.detail.value);
+    this.filterOrders();
+  }
+
+  handleRefresh(event: any) {
+    console.log('Refreshing orders data...');
+
+    // Refresh all orders data
+    this.getAllOrders();
+
+    // Complete the refresh after a short delay to show the loading state
+    setTimeout(() => {
+      event.target.complete();
+    }, 1000);
+  }
+
+  // Filter orders based on current segment
+  filterOrders() {
+    console.log('Filtering orders for status:', this.status);
+
+    switch (this.status) {
+      case 0: // Received - Pending orders
+        this.orders = this.allOrders.filter((order) => order.status === 0);
+        break;
+      case 3: // Arriving - Picked-up orders
+        this.orders = this.allOrders.filter((order) => order.status === 3);
+        break;
+      case 7: // Completed orders
+        this.orders = this.allOrders.filter((order) => order.status === 7);
+        break;
+      default:
+        this.orders = this.allOrders;
+    }
+
+    console.log('Filtered orders count:', this.orders.length);
   }
 
   async presentActionSheet(orderId: any) {
@@ -48,7 +83,6 @@ export class Tab4Page implements OnInit {
             handler: () => {
               console.log('Reject Order and Assign 8');
               this.orderChangeStatus(orderId, 8);
-              
             },
           },
           {
@@ -95,7 +129,7 @@ export class Tab4Page implements OnInit {
     this.auth.updateOrderStatus(orderId, status).subscribe({
       next: async (value: any) => {
         console.log(value);
-        this.getAllOrders(0);
+        this.getAllOrders(); // Refresh all orders and re-filter
       },
       error: async (error: HttpErrorResponse) => {
         console.log(error.error);
@@ -103,14 +137,28 @@ export class Tab4Page implements OnInit {
     });
   }
 
-  getAllOrders(status:any) {
-    this.auth.getAllOrders(status).subscribe({
+  // Fetch all orders without status filter
+  getAllOrders() {
+    // Use status -1 or null to get all orders, or modify your API call accordingly
+    this.auth.getAllOrders(-1).subscribe({
       next: async (value: any) => {
-        console.log(value);
-        this.orders = value['data']['content'];
+        console.log('All orders received:', value);
+        this.allOrders = value['data']['content'];
+        this.filterOrders(); // Apply current filter
       },
       error: async (error: HttpErrorResponse) => {
         console.log(error.error);
+        // If API doesn't support getting all orders, try with status 0
+        this.auth.getAllOrders(0).subscribe({
+          next: async (fallbackValue: any) => {
+            console.log('Fallback orders received:', fallbackValue);
+            this.allOrders = fallbackValue['data']['content'];
+            this.filterOrders();
+          },
+          error: async (fallbackError: HttpErrorResponse) => {
+            console.log('Fallback error:', fallbackError.error);
+          },
+        });
       },
     });
   }
@@ -119,7 +167,7 @@ export class Tab4Page implements OnInit {
     this.auth.AcceptRejectOrder(orderId, status).subscribe({
       next: async (value: any) => {
         console.log(value);
-        this.getAllOrders(0);
+        this.getAllOrders(); // Refresh all orders and re-filter
       },
       error: async (error: HttpErrorResponse) => {
         console.log(error.error);
@@ -131,7 +179,7 @@ export class Tab4Page implements OnInit {
     this.auth.AcceptRejectOrder(orderId, 8).subscribe({
       next: async (value: any) => {
         console.log(value);
-        this.getAllOrders(0);
+        this.getAllOrders(); // Refresh all orders and re-filter
       },
       error: async (error: HttpErrorResponse) => {
         console.log(error.error);
