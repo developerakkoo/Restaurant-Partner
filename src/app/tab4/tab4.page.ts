@@ -53,6 +53,9 @@ export class Tab4Page implements OnInit {
       case 3: // Arriving - Picked-up orders
         this.orders = this.allOrders.filter((order) => order.status === 3);
         break;
+      case 4: // In Process - Orders being processed
+        this.orders = this.allOrders.filter((order) => order.status === 4);
+        break;
       case 7: // Completed orders
         this.orders = this.allOrders.filter((order) => order.status === 7);
         break;
@@ -66,7 +69,7 @@ export class Tab4Page implements OnInit {
   async presentActionSheet(orderId: any) {
     if (this.status == 0) {
       const actionSheet = await this.actionSheetController.create({
-        header: 'Albums',
+        header: 'Action',
         buttons: [
           {
             text: 'Accept',
@@ -99,7 +102,7 @@ export class Tab4Page implements OnInit {
       await actionSheet.present();
     } else if (this.status == 4) {
       const actionSheet = await this.actionSheetController.create({
-        header: 'Albums',
+        header: 'Action',
         buttons: [
           {
             text: 'Handed over to Delivery Boy',
@@ -107,7 +110,7 @@ export class Tab4Page implements OnInit {
             icon: 'checkmark',
             handler: () => {
               console.log('Delete clicked');
-              this.handedToDeliveryBoy(orderId, 6);
+              this.handedToDeliveryBoy(orderId, 5);
             },
           },
           {
