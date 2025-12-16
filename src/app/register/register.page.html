@@ -1,113 +1,158 @@
-<ion-header [translucent]="true" class="ion-no-border">
-  <ion-toolbar>
-    <ion-title class="ion-text-center">Register to DropEat</ion-title>
-    <ion-buttons slot="start">
-      <ion-back-button defaultHref=""></ion-back-button>
-    </ion-buttons>
-  </ion-toolbar>
-</ion-header>
-
-<ion-content [fullscreen]="true" class="ion-padding">
-  <form [formGroup]="form" class="ion-margin-top">
-    <ion-text
-      color="dark"top
-      class="ion-text-center animate__animated animate__fadeIn"
-    >
-      <h1 class="poppins-semibold">Sign up</h1>
-    </ion-text>
-    <br />
-    <img class="ion-text-center" src="assets/logo.svg" alt="" srcset="">
-    <ion-input
-      class="animate__animated animate__fadeIn"
-      color="medium"
-      labelPlacement="stacked"
-      label="Full name"
-      placeholder="Robin"
-      fill="outline"
-      type="text"
-      formControlName="name"
-    >
-      <ion-icon
-        color="primary"
-        slot="start"
-        name="mail-outline"
-        aria-hidden="true"
-      ></ion-icon>
-    </ion-input>
-    <br />
-    <ion-input
-      class="animate__animated animate__fadeIn"
-      color="medium"
-      labelPlacement="stacked"
-      label="Phone No"
-      placeholder="+91XXXXXXXXXX"
-      fill="outline"
-      type="number"
-      formControlName="phoneNumber"
-    >
-      <ion-icon
-        color="primary"
-        slot="start"
-        name="call-outline"
-        aria-hidden="true"
-      ></ion-icon>
-    </ion-input>
-    <br />
-    <ion-input
-      class="animate__animated animate__fadeIn"
-      color="medium"
-      labelPlacement="stacked"
-      label="Email"
-      placeholder="email@domain.com"
-      fill="outline"
-      type="email"
-      formControlName="email"
-    >
-      <ion-icon
-        color="primary"
-        slot="start"
-        name="mail-outline"
-        aria-hidden="true"
-      ></ion-icon>
-    </ion-input>
-
-    <br />
-    <ion-input
-      class="animate__animated animate__fadeIn"
-      color="medium"
-      labelPlacement="stacked"
-      label="Password"
-      type="password"
-      fill="outline"
-      formControlName="password"
-    >
-      <ion-icon
-        color="primary"
-        slot="start"
-        name="lock-closed-outline"
-        aria-hidden="true"
-      ></ion-icon>
-      <ion-button fill="clear" slot="end" aria-label="Show/hide">
+<ion-content [fullscreen]="true" class="animate__animated animate__fadeIn">
+  <div class="container">
+    <form [formGroup]="form" (ngSubmit)="register()">
+      <div class="text-container">
+        <div class="brand">
+          <p class="dark-text">Create your account!👋</p>
+          <p class="light-text">Sign up to get started with DropE&#64;t.</p>
+        </div>
+      </div>
+      <br />
+      <ion-input
+        class="animate__animated animate__fadeIn"
+        color="medium"
+        labelPlacement="stacked"
+        label="Full name"
+        placeholder="Enter your full name"
+        fill="outline"
+        type="text"
+        mode="md"
+        formControlName="name"
+        [errorText]="getFieldErrorMessage('name')"
+      >
         <ion-icon
-          slot="icon-only"
-          name="eye-outline"
+          color="primary"
+          slot="start"
+          name="person-outline"
           aria-hidden="true"
         ></ion-icon>
+      </ion-input>
+
+      <br />
+      <ion-input
+        class="animate__animated animate__fadeIn"
+        color="medium"
+        labelPlacement="stacked"
+        label="Phone Number"
+        placeholder="Enter 10-digit phone number"
+        fill="outline"
+        type="tel"
+        mode="md"
+        formControlName="phoneNumber"
+        counter="true"
+        maxlength="10"
+        helperText="Securing your personal information is our priority"
+        [errorText]="getFieldErrorMessage('phoneNumber')"
+      >
+        <ion-icon
+          color="primary"
+          slot="start"
+          name="call-outline"
+          aria-hidden="true"
+        ></ion-icon>
+      </ion-input>
+
+      <br />
+      <ion-input
+        class="animate__animated animate__fadeIn"
+        color="medium"
+        labelPlacement="stacked"
+        label="Email"
+        placeholder="email@domain.com"
+        fill="outline"
+        type="email"
+        mode="md"
+        formControlName="email"
+        [errorText]="getFieldErrorMessage('email')"
+      >
+        <ion-icon
+          color="primary"
+          slot="start"
+          name="mail-outline"
+          aria-hidden="true"
+        ></ion-icon>
+      </ion-input>
+
+      <br />
+      <div class="password-input-wrapper">
+        <ion-input
+          class="animate__animated animate__fadeIn"
+          color="medium"
+          labelPlacement="stacked"
+          label="Password"
+          placeholder="Enter your password"
+          [type]="showPassword ? 'text' : 'password'"
+          fill="outline"
+          mode="md"
+          formControlName="password"
+          [errorText]="getFieldErrorMessage('password')"
+        >
+          <ion-icon
+            color="primary"
+            slot="start"
+            name="lock-closed-outline"
+            aria-hidden="true"
+          ></ion-icon>
+          <ion-button fill="clear" slot="end" (click)="togglePasswordVisibility()" aria-label="Show/hide password">
+            <ion-icon
+              slot="icon-only"
+              [name]="showPassword ? 'eye-off-outline' : 'eye-outline'"
+              aria-hidden="true"
+            ></ion-icon>
+          </ion-button>
+        </ion-input>
+        <ion-note *ngIf="passwordControl?.touched && passwordControl?.errors" color="danger" class="password-error-note">
+          <small>{{ getFieldErrorMessage('password') }}</small>
+        </ion-note>
+      </div>
+
+      <br />
+      <ion-button
+        *ngIf="!isRegistering"
+        [disabled]="form.invalid"
+        color="primary"
+        (click)="register()"
+        expand="block"
+        fill="solid"
+        mode="ios"
+        class="animate__animated animate__slideInUp"
+      >
+        Register
+        <ion-icon
+          class="animate__animated animate__shakeX"
+          slot="end"
+          name="arrow-forward"
+        ></ion-icon>
       </ion-button>
-    </ion-input>
-   
+      <ion-button
+        *ngIf="isRegistering"
+        [disabled]="form.invalid"
+        color="primary"
+        expand="block"
+        fill="solid"
+        mode="ios"
+        class="animate__animated animate__slideInUp"
+      >
+        <ion-spinner name="lines"></ion-spinner>
+      </ion-button>
+    </form>
 
-    <br />
-
-    <button
-      fill="clear"
-      [disabled]="form.invalid"
-      (click)="register()"
-      class="button-primary"
-    >
-      Register
-    </button>
-
-    <br />
-  </form>
+    <div class="footer animate__animated animate__fadeIn">
+      <p class="poppins-regular">Already have an account?</p>
+      <span class="poppins-bold" routerLink="">Login</span>
+    </div>
+  </div>
 </ion-content>
+<ion-footer
+  class="ion-no-border ion-padding animate__animated animate__slideInUp"
+>
+  <ion-toolbar color="light" class="ion-no-border">
+    <ion-text class="ion-text-center" color="dark">
+      <p style="font-size: 12px">
+        By registering, you agree to our
+        <strong routerLink="/terms">terms and conditions,</strong>
+        <strong routerLink="/policy">privacy policy.</strong>
+      </p>
+    </ion-text>
+  </ion-toolbar>
+</ion-footer>

@@ -41,9 +41,13 @@
     </ion-header>
     <ion-content class="ion-padding">
     <div class="image-upload-container">
-      <input #f hidden type="file" name="" (change)="uploadImage($event)" id="">
+      <input #f hidden type="file" name="" (change)="uploadImage($event)" id="" accept="image/*">
       <ion-button (click)="f.click()" expand="block" fill="outline" shape="round">
         Select and Upload
+      </ion-button>
+      <br>
+      <ion-button (click)="setOpen(false)" expand="block" fill="clear" color="medium">
+        Skip for now
       </ion-button>
     </div>
     </ion-content>

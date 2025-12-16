@@ -1,28 +1,222 @@
 <ion-header [translucent]="true" class="ion-no-border">
-  <ion-toolbar>
-    <ion-title >My Profile</ion-title>
+  <ion-toolbar color="primary">
+    <ion-title class="ion-text-center">Edit Profile</ion-title>
     <ion-buttons slot="start">
-      <ion-back-button></ion-back-button>
+      <ion-back-button defaultHref="/tabs/tabs/tab5"></ion-back-button>
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true" class="ion-padding">
- <form [formGroup]="form" (ngSubmit)="onSubmit()">
-  <ion-item>
-    <ion-label position="floating">E-Mail <ion-text color="danger">*</ion-text></ion-label>
-    <ion-input required formControlName="email" type="text"></ion-input>
-  </ion-item>
-  <ion-item>
-    <ion-label position="floating">Name <ion-text color="danger">*</ion-text></ion-label>
-    <ion-input required formControlName="name" type="text"></ion-input>
-  </ion-item>
-  <ion-item>
-    <ion-label position="floating">Phone No <ion-text color="danger">*</ion-text></ion-label>
-    <ion-input required formControlName="phoneNumber" type="text"></ion-input>
-  </ion-item>
-  <ion-button expand="block" color="primary" type="submit" [disabled]="form.invalid">
-    Edit & Save
-  </ion-button>
- </form>
+  <!-- User Profile Section -->
+  <ion-card class="section-card">
+    <ion-card-header>
+      <ion-card-title>
+        <ion-icon name="person-outline"></ion-icon>
+        Personal Information
+      </ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <form [formGroup]="userForm">
+        <ion-input
+          class="animate__animated animate__fadeIn"
+          color="medium"
+          labelPlacement="stacked"
+          label="Full Name"
+          placeholder="Enter your full name"
+          fill="outline"
+          type="text"
+          mode="md"
+          formControlName="name"
+          [errorText]="userForm.get('name')?.touched && userForm.get('name')?.hasError('required') ? 'Name is required' : ''"
+        >
+          <ion-icon
+            color="primary"
+            slot="start"
+            name="person-outline"
+            aria-hidden="true"
+          ></ion-icon>
+        </ion-input>
+
+        <br />
+        <ion-input
+          class="animate__animated animate__fadeIn"
+          color="medium"
+          labelPlacement="stacked"
+          label="Email"
+          placeholder="email@domain.com"
+          fill="outline"
+          type="email"
+          mode="md"
+          formControlName="email"
+          [errorText]="userForm.get('email')?.touched && userForm.get('email')?.hasError('email') ? 'Please enter a valid email' : ''"
+        >
+          <ion-icon
+            color="primary"
+            slot="start"
+            name="mail-outline"
+            aria-hidden="true"
+          ></ion-icon>
+        </ion-input>
+
+        <br />
+        <ion-input
+          class="animate__animated animate__fadeIn"
+          color="medium"
+          labelPlacement="stacked"
+          label="Phone Number"
+          placeholder="Enter 10-digit phone number"
+          fill="outline"
+          type="tel"
+          mode="md"
+          formControlName="phoneNumber"
+          counter="true"
+          maxlength="10"
+          [errorText]="userForm.get('phoneNumber')?.touched && userForm.get('phoneNumber')?.hasError('pattern') ? 'Please enter a valid 10-digit phone number' : ''"
+        >
+          <ion-icon
+            color="primary"
+            slot="start"
+            name="call-outline"
+            aria-hidden="true"
+          ></ion-icon>
+        </ion-input>
+
+        <br />
+        <ion-button
+          expand="block"
+          color="primary"
+          fill="solid"
+          mode="ios"
+          [disabled]="userForm.invalid"
+          (click)="updateUserProfile()"
+          class="animate__animated animate__slideInUp"
+        >
+          <ion-icon name="checkmark-outline" slot="start"></ion-icon>
+          Update Profile
+        </ion-button>
+      </form>
+    </ion-card-content>
+  </ion-card>
+
+  <!-- Hotel Information Section -->
+  <ion-card class="section-card" *ngIf="hotelId">
+    <ion-card-header>
+      <ion-card-title>
+        <ion-icon name="restaurant-outline"></ion-icon>
+        Hotel Information
+      </ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <!-- Hotel Image -->
+      <div class="hotel-image-container">
+        <img
+          [src]="hotelImage || 'assets/Avatar.svg'"
+          alt="Hotel Image"
+          class="hotel-image"
+          (click)="hotelImageInput.click()"
+        />
+        <div class="image-overlay" (click)="hotelImageInput.click()">
+          <ion-icon name="camera-outline" class="camera-icon"></ion-icon>
+        </div>
+        <input
+          #hotelImageInput
+          hidden
+          type="file"
+          accept="image/*"
+          (change)="onHotelImageSelected($event)"
+        />
+        <p class="image-hint">Click to change hotel image</p>
+      </div>
+
+      <form [formGroup]="hotelForm">
+        <ion-input
+          class="animate__animated animate__fadeIn"
+          color="medium"
+          labelPlacement="stacked"
+          label="Hotel Name"
+          placeholder="Enter hotel name"
+          fill="outline"
+          type="text"
+          mode="md"
+          formControlName="hotelName"
+          [errorText]="hotelForm.get('hotelName')?.touched && hotelForm.get('hotelName')?.hasError('required') ? 'Hotel name is required' : ''"
+        >
+          <ion-icon
+            color="primary"
+            slot="start"
+            name="restaurant-outline"
+            aria-hidden="true"
+          ></ion-icon>
+        </ion-input>
+
+        <br />
+        <ion-input
+          class="animate__animated animate__fadeIn"
+          color="medium"
+          labelPlacement="stacked"
+          label="Address"
+          placeholder="Enter hotel address"
+          fill="outline"
+          type="text"
+          mode="md"
+          formControlName="address"
+          [errorText]="hotelForm.get('address')?.touched && hotelForm.get('address')?.hasError('required') ? 'Address is required' : ''"
+        >
+          <ion-icon
+            color="primary"
+            slot="start"
+            name="location-outline"
+            aria-hidden="true"
+          ></ion-icon>
+        </ion-input>
+
+        <br />
+        <ion-item fill="outline" class="category-select">
+          <ion-label position="stacked">Categories <ion-text color="danger">*</ion-text></ion-label>
+          <ion-select
+            formControlName="categoryId"
+            placeholder="Select categories"
+            multiple="true"
+            interface="popover"
+          >
+            <ion-select-option *ngFor="let category of categories" [value]="category._id">
+              {{ category.name }}
+            </ion-select-option>
+          </ion-select>
+        </ion-item>
+
+        <br />
+        <ion-button
+          expand="block"
+          color="primary"
+          fill="solid"
+          mode="ios"
+          [disabled]="hotelForm.invalid"
+          (click)="updateHotel()"
+          class="animate__animated animate__slideInUp"
+        >
+          <ion-icon name="checkmark-outline" slot="start"></ion-icon>
+          Update Hotel
+        </ion-button>
+      </form>
+    </ion-card-content>
+  </ion-card>
+
+  <!-- No Hotel Message -->
+  <ion-card class="section-card" *ngIf="!hotelId">
+    <ion-card-content class="ion-text-center">
+      <ion-icon name="restaurant-outline" class="no-hotel-icon"></ion-icon>
+      <h3>No Hotel Registered</h3>
+      <p>Please register a hotel first to edit hotel details.</p>
+      <ion-button
+        fill="outline"
+        color="primary"
+        routerLink="/hotel"
+        class="ion-margin-top"
+      >
+        Register Hotel
+      </ion-button>
+    </ion-card-content>
+  </ion-card>
 </ion-content>

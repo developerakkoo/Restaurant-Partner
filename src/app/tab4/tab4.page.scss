@@ -1,25 +1,34 @@
-.order-type-badge {
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  font-size: 12px;
-  font-weight: 500;
-}
+// Modern Order Management Styles
 
-ion-card-header {
-  position: relative;
-}
-
-ion-segment {
-  margin-bottom: 16px;
-}
-
-ion-list {
-  margin-top: 16px;
-}
-
-ion-card {
-  margin-bottom: 16px;
+.order-segments {
+  margin-bottom: 20px;
+  border-radius: 12px;
+  background: var(--ion-color-light);
+  padding: 4px;
+  
+  ion-segment-button {
+    --indicator-color: var(--ion-color-primary);
+    --color: var(--ion-color-medium);
+    --color-checked: var(--ion-color-primary);
+    border-radius: 8px;
+    min-height: 48px;
+    
+    ion-label {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      
+      ion-icon {
+        font-size: 20px;
+      }
+      
+      span {
+        font-size: 12px;
+        font-weight: 500;
+      }
+    }
+  }
 }
 
 .loading-container {
@@ -27,22 +36,329 @@ ion-card {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 40px 20px;
+  padding: 60px 20px;
   text-align: center;
   
   ion-spinner {
     margin-bottom: 16px;
+    --color: var(--ion-color-primary);
   }
   
   p {
     color: var(--ion-color-medium);
     margin: 0;
+    font-size: 14px;
   }
 }
 
-ion-list-header {
-  ion-label {
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 80px 20px;
+  text-align: center;
+  
+  .empty-icon {
+    font-size: 64px;
+    margin-bottom: 16px;
+    opacity: 0.3;
+    color: var(--ion-color-medium);
+  }
+  
+  h3 {
+    margin: 0 0 8px 0;
+    font-size: 20px;
     font-weight: 600;
-    color: var(--ion-color-primary);
+    color: var(--ion-color-dark);
+  }
+  
+  p {
+    margin: 0;
+    font-size: 14px;
+    color: var(--ion-color-medium);
+    line-height: 1.4;
+  }
+}
+
+.orders-list {
+  margin-top: 16px;
+  
+  ion-list-header {
+    background: var(--ion-color-light);
+    border-radius: 12px 12px 0 0;
+    padding: 16px;
+    margin-bottom: 8px;
+    
+    ion-label {
+      h2 {
+        margin: 0 0 4px 0;
+        font-size: 18px;
+        font-weight: 600;
+        color: var(--ion-color-dark);
+      }
+      
+      p {
+        margin: 0;
+        font-size: 12px;
+        color: var(--ion-color-medium);
+      }
+    }
+  }
+}
+
+.order-card {
+  margin-bottom: 16px;
+  border-radius: 16px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+  overflow: hidden;
+  transition: all 0.3s ease;
+  
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+  }
+  
+  &.new-order {
+    border-left: 4px solid var(--ion-color-primary);
+    animation: pulse-border 2s ease-in-out infinite;
+  }
+  
+  ion-card-header {
+    padding: 16px;
+    background: linear-gradient(135deg, var(--ion-color-light) 0%, #ffffff 100%);
+    border-bottom: 1px solid var(--ion-color-light-shade);
+    
+    .order-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 12px;
+      
+      .order-info {
+        flex: 1;
+        
+        ion-card-title {
+          font-size: 18px;
+          font-weight: 600;
+          color: var(--ion-color-dark);
+          margin-bottom: 8px;
+        }
+        
+        ion-card-subtitle {
+          display: flex;
+          align-items: center;
+          gap: 6px;
+          font-size: 13px;
+          color: var(--ion-color-medium);
+          margin-top: 4px;
+          
+          ion-icon {
+            font-size: 16px;
+          }
+        }
+      }
+      
+      .order-badges {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+        align-items: flex-end;
+        
+        .status-badge {
+          display: flex;
+          align-items: center;
+          gap: 4px;
+          font-size: 11px;
+          font-weight: 600;
+          padding: 6px 10px;
+          border-radius: 12px;
+          
+          ion-icon {
+            font-size: 14px;
+          }
+        }
+        
+        .type-badge {
+          font-size: 10px;
+          font-weight: 500;
+          padding: 4px 8px;
+          border-radius: 8px;
+        }
+      }
+    }
+  }
+  
+  ion-card-content {
+    padding: 16px;
+    
+    .order-items {
+      margin-bottom: 16px;
+      
+      h3 {
+        font-size: 14px;
+        font-weight: 600;
+        color: var(--ion-color-dark);
+        margin-bottom: 12px;
+      }
+      
+      .product-item {
+        --padding-start: 0;
+        --inner-padding-end: 0;
+        margin-bottom: 8px;
+        border-radius: 8px;
+        background: var(--ion-color-light);
+        padding: 8px;
+        
+        ion-avatar {
+          width: 48px;
+          height: 48px;
+          
+          img {
+            object-fit: cover;
+            border-radius: 8px;
+          }
+        }
+        
+        ion-label {
+          h3 {
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--ion-color-dark);
+            margin: 0 0 4px 0;
+          }
+          
+          p {
+            font-size: 12px;
+            color: var(--ion-color-medium);
+            margin: 0;
+          }
+        }
+        
+        ion-note {
+          font-size: 14px;
+          font-weight: 600;
+          color: var(--ion-color-primary);
+        }
+      }
+    }
+    
+    .price-details {
+      background: var(--ion-color-light);
+      border-radius: 12px;
+      padding: 12px;
+      margin-bottom: 16px;
+      
+      .price-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 6px 0;
+        font-size: 14px;
+        
+        span:first-child {
+          color: var(--ion-color-medium);
+        }
+        
+        span:last-child {
+          font-weight: 500;
+          color: var(--ion-color-dark);
+        }
+        
+        &.total {
+          border-top: 1px solid var(--ion-color-light-shade);
+          margin-top: 8px;
+          padding-top: 12px;
+          
+          span:first-child {
+            font-weight: 600;
+            font-size: 16px;
+            color: var(--ion-color-dark);
+          }
+          
+          .total-amount {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--ion-color-primary);
+          }
+        }
+      }
+    }
+    
+    .action-buttons {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      
+      .action-btn {
+        margin: 0;
+        --border-radius: 12px;
+        font-weight: 500;
+        text-transform: none;
+        height: 44px;
+        
+        ion-icon {
+          font-size: 20px;
+        }
+      }
+    }
+  }
+}
+
+// Spinning animation for refresh icon
+.spinning {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+// Pulse animation for new orders
+@keyframes pulse-border {
+  0%, 100% {
+    border-left-color: var(--ion-color-primary);
+    opacity: 1;
+  }
+  50% {
+    border-left-color: var(--ion-color-primary-tint);
+    opacity: 0.7;
+  }
+}
+
+// Responsive design
+@media (max-width: 768px) {
+  .order-card {
+    ion-card-header {
+      .order-header {
+        flex-direction: column;
+        
+        .order-badges {
+          flex-direction: row;
+          align-self: flex-start;
+        }
+      }
+    }
+  }
+}
+
+// Fade in animation for orders
+.order-card {
+  animation: fadeInUp 0.3s ease-out;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
 }

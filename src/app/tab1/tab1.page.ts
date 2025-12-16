@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
 import { LoadingController, ToastController } from '@ionic/angular';
 import { AuthService } from '../services/auth.service';
@@ -6,13 +6,14 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { DataService } from '../services/data.service';
 import { Socket } from 'ngx-socket-io';
 import { RefresherEventDetail } from '@ionic/angular';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-tab1',
   templateUrl: 'tab1.page.html',
   styleUrls: ['tab1.page.scss'],
 })
-export class Tab1Page {
+export class Tab1Page implements OnDestroy {
   restaurantName: string = '';
   weeklyRevenue: any = 0;
   monthlyRevenue: any = 0;
@@ -22,6 +23,7 @@ export class Tab1Page {
   totalRevenue: any = 0;
   weeklyStats: any[] = [];
   isShopOpen: boolean = false; // Toggle state
+  private shopDataSubscription?: Subscription;
 
   constructor(
     private router: Router,
@@ -32,15 +34,100 @@ export class Tab1Page {
     private toastController: ToastController
   ) {}
 
-  ionViewDidEnter() {
-    this.auth.shopData.subscribe((res: any) => {
+  ngOnDestroy() {
+    if (this.shopDataSubscription) {
+      this.shopDataSubscription.unsubscribe();
+    }
+  }
+
+  async ionViewDidEnter() {
+    // Load hotel data from storage first
+    await this.loadHotelDataFromStorage();
+    
+    // Subscribe to shopData changes (unsubscribe on destroy)
+    this.shopDataSubscription = this.auth.shopData.subscribe((res: any) => {
       if (res) {
-        console.log(res);
-        this.restaurantName = res['name'];
+        console.log('Shop data updated:', res);
+        this.restaurantName = res?.hotelName || '';
+        // Update storage if we got new data
+        if (res?.hotelName) {
+          this.data.set('hotelData', JSON.stringify(res));
+        }
       }
     });
+    
     this.getAnalyticsData();
     this.loadShopStatus(); // Load shop status on page enter
+  }
+
+  /**
+   * Load hotel data from local storage first
+   */
+  async loadHotelDataFromStorage() {
+    try {
+      const hotelDataStr = await this.data.get('hotelData');
+      if (hotelDataStr) {
+        const hotelData = JSON.parse(hotelDataStr);
+        this.restaurantName = hotelData?.hotelName || '';
+        console.log('Loaded hotel name from storage:', this.restaurantName);
+        
+        // Update AuthService shopData if not already set
+        if (!this.auth.shopData.value) {
+          this.auth.shopData.next(hotelData);
+        }
+      } else {
+        // If not in storage, fetch from API
+        await this.fetchHotelDataFromAPI();
+      }
+    } catch (error) {
+      console.error('Error loading hotel data from storage:', error);
+      await this.fetchHotelDataFromAPI();
+    }
+  }
+
+  /**
+   * Fetch hotel data from API if not in storage
+   */
+  async fetchHotelDataFromAPI() {
+    const userId = this.auth.userId.value;
+    if (!userId) {
+      console.warn('User ID not found, cannot fetch hotel data');
+      return;
+    }
+
+    // Use getPartnerById with populate to get hotel details
+    this.auth.getPartnerById(true).subscribe({
+      next: async (response: any) => {
+        console.log('Partner data from API:', response);
+        if (response && response.data) {
+          const partnerData = response.data;
+          
+          // Check if hotels are populated
+          if (partnerData.hotels && Array.isArray(partnerData.hotels) && partnerData.hotels.length > 0) {
+            const hotelData = partnerData.hotels[0]; // Get first hotel
+            this.restaurantName = hotelData?.hotelName || '';
+            
+            // Store in local storage
+            await this.data.set('hotelData', JSON.stringify(hotelData));
+            
+            // Update AuthService
+            this.auth.shopData.next(hotelData);
+            
+            console.log('Fetched and stored hotel data:', hotelData);
+          } else if (partnerData.hotelId) {
+            // If hotelId is a string, we might need to fetch hotel separately
+            // For now, try to get from shopData
+            const shopData = this.auth.shopData.value;
+            if (shopData) {
+              this.restaurantName = shopData?.hotelName || '';
+            }
+          }
+        }
+      },
+      error: (error: HttpErrorResponse) => {
+        console.error('Error fetching partner/hotel data:', error);
+      }
+    });
   }
 
   // Load shop status from local storage or API
@@ -67,7 +154,8 @@ export class Tab1Page {
       next: async (response: any) => {
         console.log('Shop data from API:', response);
         if (response && response.data) {
-          this.isShopOpen = response.data.isOpen || false;
+          // API uses isOnline, not isOpen
+          this.isShopOpen = response.data.isOnline || false;
           // Save to local storage
           await this.data.set('shopStatus', this.isShopOpen.toString());
           console.log('Updated shop status from API:', this.isShopOpen);
@@ -99,11 +187,11 @@ export class Tab1Page {
           // Current month stats
           if (data.currentMonthStats) {
             this.monthlyRevenue = data.currentMonthStats.totalEarnings || 0;
-            // Note: todaysOrders and todaysRevenue are not in the current response
-            // You might need to add these to your API or calculate them differently
-            this.todaysOrders = 0; // Placeholder - needs API update
-            this.todaysRevenue = 0; // Placeholder - needs API update
           }
+
+          // Today's stats
+          this.todaysOrders = data.todaysOrders || 0;
+          this.todaysRevenue = data.todaysRevenue || 0;
 
           // Weekly stats
           if (data.weeklyStats && Array.isArray(data.weeklyStats)) {

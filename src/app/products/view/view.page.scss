@@ -1,0 +1,12 @@
+.in-stock {
+  color: var(--ion-color-success);
+}
+
+.out-of-stock {
+  color: var(--ion-color-danger);
+}
+
+ion-badge {
+  margin-top: 4px;
+}
+

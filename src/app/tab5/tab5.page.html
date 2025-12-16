@@ -33,8 +33,12 @@
       />
 
       <div class="profile-info">
-        <h2 class="profile-name">{{name || "Loading..."}}</h2>
-        <p class="profile-email">{{email || "Loading..."}}</p>
+        <h2 class="profile-name">{{name || "User"}}</h2>
+        <p class="profile-email">{{email || "No email"}}</p>
+        <p class="hotel-name" *ngIf="hotelName">
+          <ion-icon name="restaurant-outline"></ion-icon>
+          {{hotelName}}
+        </p>
         <ion-button
           fill="clear"
           size="small"

@@ -1,0 +1,162 @@
+.container{
+    height: 100vh;
+    width: 100vw;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: #fff;
+    padding: 20px;
+}
+
+ion-button{
+  width: 100%;
+}
+
+form{
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  align-content: center;
+  justify-content: space-evenly;
+  align-items: center;
+  width: 100%;
+}
+
+.text-container{
+  width: 100%;
+  height: auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.brand {
+  width: 100%;
+  text-align: left;
+}
+
+.dark-text{
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin: 0;
+  color: var(--ion-color-primary);
+}
+
+.light-text{
+  color: var(--ion-color-medium);
+  font-weight: 400;
+  font-size: 0.9em;
+  margin: 0;
+}
+
+ion-input{
+  --placeholder-color: var(--ion-color-medium);
+  --highlight-color-focused: var(--ion-color-primary);
+  --color: var(--ion-color-dark);
+  width: 100%;
+  margin-bottom: 0;
+  min-height: auto;
+  height: auto;
+  
+  // Fix button inside input
+  ion-button {
+    --padding-start: 0;
+    --padding-end: 0;
+    margin: 0;
+    height: 40px;
+    min-height: 40px;
+    width: 40px;
+    
+    ion-icon {
+      font-size: 20px;
+    }
+  }
+  
+  // Ensure native input doesn't expand
+  .native-input {
+    min-height: auto !important;
+    height: auto !important;
+    line-height: normal !important;
+  }
+}
+
+// Ensure input wrapper has normal height
+ion-item {
+  --min-height: auto;
+  --padding-start: 0;
+  --padding-end: 0;
+  --inner-padding-end: 0;
+}
+
+// Password input wrapper to prevent height expansion
+.password-input-wrapper {
+  width: 100%;
+  position: relative;
+  
+  ion-input {
+    margin-bottom: 0;
+  }
+}
+
+// Fix ion-note positioning to not affect input height
+.password-error-note {
+  display: block;
+  margin-top: 4px;
+  margin-bottom: 0;
+  margin-left: 0;
+  padding: 0;
+  height: auto;
+  min-height: auto;
+  line-height: 1.2;
+  position: relative;
+  
+  small {
+    display: block;
+    line-height: 1.2;
+    font-size: 12px;
+  }
+}
+
+// General ion-note styling
+ion-note {
+  display: block;
+  margin-top: 4px;
+  margin-bottom: 0;
+  padding: 0;
+  height: auto;
+  min-height: auto;
+  line-height: 1.2;
+  
+  small {
+    display: block;
+    line-height: 1.2;
+    font-size: 12px;
+  }
+}
+
+.footer{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  margin-top: 20px;
+}
+
+.footer p{
+  color: #666;
+  font-size: 12px;
+  margin: 0;
+}
+
+.footer span{
+  color: var(--ion-color-primary);
+  font-size: 12px;
+  margin-left: 6px;
+  cursor: pointer;
+  font-weight: 700;
+  
+  &:hover {
+    text-decoration: underline;
+  }
+}

@@ -1,40 +1,93 @@
+<ion-content [fullscreen]="true" class="animate__animated animate__fadeIn">
+  <div class="container">
+    <form [formGroup]="form" (ngSubmit)="login()">
+      <div class="text-container">
+        <div class="brand">
+          <p class="dark-text">Hi!👋 Welcome to DropE&#64;t.</p>
+          <p class="light-text">Create your account or Log in.</p>
+        </div>
+      </div>
+      <br />
+      <ion-input
+        class="animate__animated animate__fadeIn"
+        color="medium"
+        labelPlacement="stacked"
+        label="Phone Number"
+        placeholder="Enter 10-digit phone number"
+        fill="outline"
+        type="tel"
+        mode="md"
+        formControlName="phoneNumber"
+        counter="true"
+        maxlength="10"
+        helperText="Securing your personal information is our priority"
+        [errorText]="getPhoneNumberErrorMessage()"
+      >
+        <ion-icon
+          color="primary"
+          slot="start"
+          name="call-outline"
+          aria-hidden="true"
+        ></ion-icon>
+      </ion-input>
 
-<ion-content [fullscreen]="true" class="ion-padding">
- 
- <div class="container-center-form">
-  <ion-text color="dark" class="ion-text-center">
-    <h1>Breezy Partner App</h1>
-    <h4>Login or Create your account</h4>
-  </ion-text>
-  <form [formGroup]="form" (ngSubmit)="login()" class="ion-padding">
-    <ion-input
-      type="number"
-      label="Enter Mobile Number"
-      label-placement="stacked"
-      fill="outline"
-      placeholder="Enter Mobile Number"
-      formControlName="phoneNumber"
-      helperText="Please enter 10 digit mobile number"
-      counter="true"
-     
-    ></ion-input>
+      <br />
+      <ion-item lines="none" class="terms-item">
+        <ion-checkbox formControlName="isAgreed" slot="start" class="terms-checkbox"></ion-checkbox>
+        <ion-label class="terms-label">
+          By Signing In I agree to 
+          <a href="#" class="terms-link">Terms of use</a> and 
+          <a href="#" class="terms-link">Privacy Policy</a>.
+        </ion-label>
+      </ion-item>
 
-    <br />
-    <ion-item lines="none">
-      <ion-label>By Signing In I agree to Terms of use and Privacy Policy.</ion-label>
-      <ion-checkbox formControlName="isAgreed" slot="start"></ion-checkbox>
-    </ion-item>
-    <ion-button
-    [disabled]="form.invalid"
-      (click)="login()"
-      expand="block"
-      fill="solid"
-     
-      mode="ios"
-    >
-      Send OTP
-    </ion-button>
- 
-  </form>
- </div>
+      <br />
+      <ion-button
+        *ngIf="!isLoggingIn"
+        [disabled]="form.invalid"
+        color="primary"
+        (click)="login()"
+        expand="block"
+        fill="solid"
+        mode="ios"
+        class="animate__animated animate__slideInUp"
+      >
+        Send OTP
+        <ion-icon
+          class="animate__animated animate__shakeX"
+          slot="end"
+          name="arrow-forward"
+        ></ion-icon>
+      </ion-button>
+      <ion-button
+        *ngIf="isLoggingIn"
+        [disabled]="form.invalid"
+        color="primary"
+        expand="block"
+        fill="solid"
+        mode="ios"
+        class="animate__animated animate__slideInUp"
+      >
+        <ion-spinner name="lines"></ion-spinner>
+      </ion-button>
+    </form>
+
+    <div class="footer animate__animated animate__fadeIn">
+      <p class="poppins-regular">Don't have an account?</p>
+      <span class="poppins-bold" routerLink="/register">Register</span>
+    </div>
+  </div>
 </ion-content>
+<ion-footer
+  class="ion-no-border ion-padding animate__animated animate__slideInUp"
+>
+  <ion-toolbar color="light" class="ion-no-border">
+    <ion-text class="ion-text-center" color="dark">
+      <p style="font-size: 12px">
+        By login, you agree to our
+        <strong routerLink="/terms">terms and conditions,</strong>
+        <strong routerLink="/policy">privacy policy.</strong>
+      </p>
+    </ion-text>
+  </ion-toolbar>
+</ion-footer>

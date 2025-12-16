@@ -1,6 +1,9 @@
 <ion-header [translucent]="true" class="ion-no-border">
   <ion-toolbar>
     <ion-title class="ion-text-center">Orders</ion-title>
+    <ion-button fill="clear" slot="end" (click)="handleRefresh()" [disabled]="isRefreshing">
+      <ion-icon slot="icon-only" name="refresh-outline" [class.spinning]="isRefreshing"></ion-icon>
+    </ion-button>
   </ion-toolbar>
 </ion-header>
 
@@ -15,98 +18,162 @@
     </ion-refresher-content>
   </ion-refresher>
 
-  <ion-segment value="0" (ionChange)="segmentChanged($event)" mode="ios">
+  <!-- Segments: Received (0), Arriving (4), Completed (3) -->
+  <ion-segment [value]="currentSegmentValue" (ionChange)="segmentChanged($event)" mode="ios" class="order-segments">
     <ion-segment-button value="0">
-      <ion-label>Received</ion-label>
-    </ion-segment-button>
-    <ion-segment-button value="3">
-      <ion-label>Arriving</ion-label>
+      <ion-label>
+        <ion-icon name="time-outline"></ion-icon>
+        <span>Received - 0</span>
+      </ion-label>
     </ion-segment-button>
     <ion-segment-button value="4">
-      <ion-label>In Process</ion-label>
+      <ion-label>
+        <ion-icon name="checkmark-circle-outline"></ion-icon>
+        <span>Arriving - 4</span>
+      </ion-label>
     </ion-segment-button>
-    <ion-segment-button value="7">
-      <ion-label>Completed Order</ion-label>
+    <ion-segment-button value="3">
+      <ion-label>
+        <ion-icon name="checkmark-done-outline"></ion-icon>
+        <span>Completed - 3</span>
+      </ion-label>
     </ion-segment-button>
   </ion-segment>
 
   <!-- Loading indicator -->
-  <div *ngIf="allOrders.length === 0" class="loading-container">
+  <div *ngIf="isLoading && allOrders.length === 0" class="loading-container">
     <ion-spinner name="crescent"></ion-spinner>
     <p>Loading orders...</p>
   </div>
 
   <!-- No orders message -->
-  <ion-text
-    color="primary"
-    class="ion-text-center"
-    *ngIf="allOrders.length > 0 && orders.length === 0"
-  >
-    <h1>No Orders Found!</h1>
+  <div *ngIf="!isLoading && allOrders.length > 0 && orders.length === 0" class="empty-state">
+    <ion-icon name="receipt-outline" class="empty-icon"></ion-icon>
+    <h3>No Orders Found</h3>
     <p>No orders found for the selected category.</p>
-  </ion-text>
+  </div>
 
-  <ion-list *ngIf="orders.length > 0">
+  <!-- Orders List -->
+  <ion-list *ngIf="orders.length > 0" class="orders-list">
     <ion-list-header>
-      <ion-label>Orders ({{orders.length}} found)</ion-label>
+      <ion-label>
+        <h2>{{getSegmentTitle()}}</h2>
+        <p>{{orders.length}} {{orders.length === 1 ? 'order' : 'orders'}} found</p>
+      </ion-label>
     </ion-list-header>
 
     <ion-card
-      *ngFor="let item of orders"
-      (click)="presentActionSheet(item._id)"
+      *ngFor="let item of orders; trackBy: trackByOrderId"
+      class="order-card"
+      [class.new-order]="isNewOrder(item)"
     >
       <ion-card-header>
-        <ion-card-subtitle
-          >Order By:- {{item.userId.phoneNumber}}</ion-card-subtitle
-        >
-        <ion-card-title> Order ID: {{item.orderId}}</ion-card-title>
-        <!-- Order Type Badge -->
-        <ion-badge
-          [color]="item.orderType === 0 ? 'primary' : 'warning'"
-          class="order-type-badge"
-        >
-          {{item.orderType === 0 ? 'Regular' : 'Express'}}
-        </ion-badge>
+        <div class="order-header">
+          <div class="order-info">
+            <ion-card-title>Order #{{item.orderId}}</ion-card-title>
+            
+            <ion-card-subtitle>
+              <ion-icon name="time-outline"></ion-icon>
+              {{item.createdAt | date:"MMM dd, yyyy 'at' hh:mm a"}}
+            </ion-card-subtitle>
+          </div>
+          <div class="order-badges">
+            <!-- Status Badge -->
+            <ion-badge [color]="getStatusColorForDisplay(item.orderStatus ?? item.status ?? 0)" class="status-badge">
+              <ion-icon [name]="getStatusIconForDisplay(item.orderStatus ?? item.status ?? 0)"></ion-icon>
+              {{getStatusNameForDisplay(item.orderStatus ?? item.status ?? 0)}}
+            </ion-badge>
+            <!-- Order Type Badge -->
+            <ion-badge
+              *ngIf="item.orderType !== undefined"
+              [color]="item.orderType === 0 ? 'primary' : 'warning'"
+              class="type-badge"
+            >
+              {{item.orderType === 0 ? 'Regular' : 'Express'}}
+            </ion-badge>
+          </div>
+        </div>
       </ion-card-header>
+
       <ion-card-content>
-        <ion-item *ngFor="let p of item.items">
-          <ion-avatar slot="start">
-            <img crossorigin="anonymous" [src]="p.serviceId.image_url" />
-          </ion-avatar>
-          <ion-label
-            >{{p.serviceId.name}}
+        <!-- Order Items -->
+        <div class="order-items" *ngIf="(item.products && item.products.length > 0) || (item.items && item.items.length > 0)">
+          <h3>Items ({{(item.products || item.items)?.length || 0}})</h3>
+          <ion-item 
+            *ngFor="let product of (item.products || item.items)" 
+            lines="none" 
+            class="product-item"
+          >
+            <ion-avatar slot="start">
+              <img
+                crossorigin="anonymous"
+                [src]="product.dishId?.image_url || product.serviceId?.image_url"
+                [alt]="product.dishId?.name || product.serviceId?.name"
+                onerror="this.src='https://placehold.co/600x400@2x.png'"
+              />
+            </ion-avatar>
+            <ion-label>
+              <h3>{{product.dishId?.name || product.serviceId?.name || 'Item'}}</h3>
+              <p>
+                <span *ngIf="product.quantity">Qty: {{product.quantity}} × </span>
+                <span>{{product.dishId?.partnerPrice * product.quantity | currency:"INR"}}</span>
+              </p>
+            </ion-label>
+            <ion-note slot="end" *ngIf="product.quantity && product.dishId?.partnerPrice">
+              {{(product.dishId?.partnerPrice * product.quantity) | currency:"INR"}}
+            </ion-note>
+          </ion-item>
+        </div>
 
-            <p>{{p.serviceId.perKgPrice | currency:"INR"}}</p>
-          </ion-label>
-        </ion-item>
-        <ion-button
-          *ngIf="item.status == 0"
-          (click)="orderChangeStatus(item._id,1)"
-          expand="block"
-          fill="solid"
-          shape="round"
-        >
-          Accept
-        </ion-button>
-        <ion-button
-          *ngIf="item.status == 3"
-          (click)="orderChangeStatus(item._id,4)"
-          expand="block"
-          fill="solid"
-          shape="round"
-        >
-          Confirm Order Received
-        </ion-button>
+        <!-- Price Details -->
+        <div class="price-details" *ngIf="item.priceDetails || item.products || item.items">
+          <div class="price-row total">
+            <span>Total amount you will get</span>
+            <span class="total-amount">{{ getPartnerTotalAmount(item) | currency:"INR" }}</span>
+          </div>
+        </div>
 
-        <ion-button
-          *ngIf="item.status == 4"
-          (click)="orderChangeStatus(item._id,5)"
-          expand="block"
-          fill="solid"
-          shape="round"
-        >
-          Confirm Order is Ready
-        </ion-button>
+        <!-- Action Buttons -->
+        <div class="action-buttons">
+          <ion-button
+            *ngIf="canAcceptOrder(item)"
+            (click)="acceptOrder(item._id); $event.stopPropagation()"
+            expand="block"
+            fill="solid"
+            shape="round"
+            color="success"
+            class="action-btn"
+          >
+            <ion-icon name="checkmark-circle-outline" slot="start"></ion-icon>
+            Accept Order
+          </ion-button>
+
+          <ion-button
+            *ngIf="canRejectOrder(item)"
+            (click)="rejectOrder(item._id); $event.stopPropagation()"
+            expand="block"
+            fill="outline"
+            shape="round"
+            color="danger"
+            class="action-btn"
+          >
+            <ion-icon name="close-circle-outline" slot="start"></ion-icon>
+            Reject Order
+          </ion-button>
+
+          <ion-button
+            *ngIf="canStartPreparation(item)"
+            (click)="startPreparation(item._id); $event.stopPropagation()"
+            expand="block"
+            fill="solid"
+            shape="round"
+            color="primary"
+            class="action-btn"
+          >
+            <ion-icon name="restaurant-outline" slot="start"></ion-icon>
+            Start Preparation
+          </ion-button>
+        </div>
       </ion-card-content>
     </ion-card>
   </ion-list>

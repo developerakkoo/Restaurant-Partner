@@ -1,6 +1,6 @@
 <ion-header [translucent]="true" class="ion-no-border">
   <ion-toolbar color="primary">
-    <ion-title class="ion-text-center">
+    <ion-title class="ion-text-left">
       <ion-icon name="restaurant-outline" class="header-icon"></ion-icon>
       Hello {{restaurantName}}
     </ion-title>
@@ -13,6 +13,7 @@
       <ion-icon slot="icon-only" name="notifications-outline"></ion-icon>
     </ion-button>
     <ion-toggle
+    color="success"
       slot="end"
       class="ion-padding"
       [(ngModel)]="isShopOpen"
@@ -162,7 +163,7 @@
     </ion-card-header>
   </ion-card>
 
-  <ion-card class="action-card" fill="outline" routerLink="/products">
+  <!-- <ion-card class="action-card" fill="outline" routerLink="/products">
     <ion-item detail class="action-item">
       <ion-icon
         name="add-circle-outline"
@@ -170,22 +171,22 @@
         class="action-icon add-icon"
       ></ion-icon>
       <ion-label>
-        <h3>Add Services</h3>
-        <p>Create new service offerings</p>
+        <h3>Add Dish</h3>
+        <p>Create new dish for your hotel</p>
       </ion-label>
     </ion-item>
-  </ion-card>
+  </ion-card> -->
 
   <ion-card class="action-card" fill="outline" routerLink="/products/view">
     <ion-item detail class="action-item">
       <ion-icon
-        name="apps-outline"
+        name="restaurant-outline"
         slot="start"
         class="action-icon view-icon"
       ></ion-icon>
       <ion-label>
-        <h3>View Services</h3>
-        <p>Manage existing services</p>
+        <h3>View Dishes</h3>
+        <p>Manage existing dishes</p>
       </ion-label>
     </ion-item>
   </ion-card>

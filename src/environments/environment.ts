@@ -4,8 +4,8 @@
 
 export const environment = {
   production: false,
-  URL: 'https://api.breezyemart.com/api/v1/',
-  // URL: 'http://localhost:3000/api/v1/',
+  // URL: 'http://192.168.1.14:8000/api/v1/',
+  URL: 'https://api.dropeat.in/api/v1/',
 };
 
 /*

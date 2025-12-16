@@ -13,67 +13,82 @@ import { DataService } from '../services/data.service';
 })
 export class ProductsPage implements OnInit {
 
-  shopId:any;
-  serviceId:any;
-  categories:any[] = [];
-  isDishImageUploadModalOpen:boolean = false;
-  form!:FormGroup;
-  showPerPiecePrice = false;
-  showPerKgPrice = false;
-  constructor(private auth: AuthService,
-              private router: Router,
-              private toastController: ToastController,
-              private data:DataService,
-              private fb: FormBuilder,
-              private loadingController: LoadingController
-  ) {
-   this.createForm();
-   }
-
- async ngOnInit() {
- 
+  hotelId: any;
+  dishId: any;
+  categories: any[] = [];
+  isDishImageUploadModalOpen: boolean = false;
+  form!: FormGroup;
   
+  constructor(
+    private auth: AuthService,
+    private router: Router,
+    private toastController: ToastController,
+    private data: DataService,
+    private fb: FormBuilder,
+    private loadingController: LoadingController
+  ) {
+    this.createForm();
   }
 
-  async createForm(){
+  async ngOnInit() {
+    // Load hotel ID from storage or auth service
+    const hotelData = await this.data.get('hotelData');
+    if (hotelData) {
+      const hotel = JSON.parse(hotelData);
+      this.hotelId = hotel._id;
+    } else if (this.auth.shopData.value) {
+      this.hotelId = this.auth.shopData.value._id;
+    }
+    console.log('Hotel ID:', this.hotelId);
+  }
+
+  async createForm() {
     this.form = this.fb.group({
-      shopeId:[''],
-     categoryId:['',[Validators.required]],
-     type:['',[Validators.required]],
-     name:['',[Validators.required]],
-     description:['',[Validators.required]],
-     quantityAcceptedIn:['',[Validators.required]],
-     perPeacePrice:['',[]],
-     perKgPrice:['',[]],
-     
-   })
-   // Initialize visibility of fields based on quantityAcceptedIn's current value
-   this.onQuantityChange({ detail: { value: this.form.get('quantityAcceptedIn')?.value || "" } });
-      this.shopId = await this.data.get("shopId");
-    console.log("shop Id");
-    console.log(this.shopId);
-      // Set the shopId in the form control
+      hotelId: ['', [Validators.required]],
+      categoryId: ['', [Validators.required]],
+      name: ['', [Validators.required]],
+      description: ['', [Validators.required]],
+      price: ['', [Validators.required, Validators.min(0)]],
+    });
+
+    // Set hotelId if available
+    if (this.hotelId) {
       this.form.patchValue({
-        shopeId: this.shopId
+        hotelId: this.hotelId
       });
+    }
   }
 
   ionViewDidEnter(){
     this.loadCategory();
   }
 
-  loadCategory(){
+  loadCategory() {
     this.auth.getAllCategory()
-    .subscribe({
-      next:async(value:any) =>{
-        console.log(value);
-        this.categories = value['data'];
-      },
-      error:async(error:HttpErrorResponse) =>{
-        console.log(error.error);
-        
-      }
-    })
+      .subscribe({
+        next: async (value: any) => {
+          console.log('Category response:', value);
+          // Handle different response structures
+          if (value?.data) {
+            if (Array.isArray(value.data)) {
+              this.categories = value.data;
+            } else if (value.data.content && Array.isArray(value.data.content)) {
+              this.categories = value.data.content;
+            } else {
+              this.categories = [];
+            }
+          } else if (Array.isArray(value)) {
+            this.categories = value;
+          } else {
+            this.categories = [];
+          }
+          console.log('Categories loaded:', this.categories);
+        },
+        error: async (error: HttpErrorResponse) => {
+          console.error('Error loading categories:', error);
+          this.categories = [];
+        }
+      });
   }
 
   async presentToast(msg:string, duration:any, color:any, position:any) {
@@ -86,90 +101,91 @@ export class ProductsPage implements OnInit {
     toast.present();
   }
 
-  uploadImage(ev:any){
+  uploadImage(ev: any) {
     let file = ev.target.files[0];
     
-    console.log(file);
-    let formdata = new FormData();
-    formdata.append("file", file, file.name);
-    formdata.append("serviceId", this.serviceId);
-    this.auth.uploadServiceImage(formdata)
-    .subscribe({
-      next:async(value:any) =>{
-        console.log(value);
-        this.setOpen(false);
-        this.presentToast("Service Addedd Successfully", 2000, 'success','bottom');
-       setTimeout(() =>{
-        this.router.navigate(['products','view']);
-       },2000)
-      },
-      error:async(error:HttpErrorResponse) =>{
-        console.log(error);
-      
-        this.presentToast("Image Upload Failed", 2000, 'danger','bottom')
+    if (!file) {
+      this.presentToast("Please select an image file", 2000, 'warning', 'bottom');
+      return;
+    }
 
-      }
-    })
+    if (!this.dishId) {
+      this.presentToast("Dish ID not found. Please add dish first.", 2000, 'danger', 'bottom');
+      return;
+    }
 
+    console.log('Uploading image for dish:', this.dishId);
+    let formData = new FormData();
+    formData.append("document", file, file.name);
+    formData.append("dishId", this.dishId);
+    
+    this.auth.uploadDishImage(formData)
+      .subscribe({
+        next: async (value: any) => {
+          console.log('Image upload response:', value);
+          this.setOpen(false);
+          this.presentToast("Dish added successfully!", 2000, 'success', 'bottom');
+          setTimeout(() => {
+            this.router.navigate(['products', 'view']);
+          }, 2000);
+        },
+        error: async (error: HttpErrorResponse) => {
+          console.error('Image upload error:', error);
+          this.presentToast("Image upload failed. Please try again.", 2000, 'danger', 'bottom');
+        }
+      });
   }
 
   setOpen(isOpen: boolean) {
     this.isDishImageUploadModalOpen = isOpen;
   }
-  // Function to handle changes in quantityAcceptedIn
-  onQuantityChange(event: any) {
-    const value = event.detail.value;
 
-    // Make sure form controls are initialized before updating validators
-    const perPieceControl = this.form.get('perPeacePrice');
-    const perKgControl = this.form.get('perKgPrice');
+  async onSubmit() {
+    if (this.form.valid) {
+      const loading = await this.loadingController.create({
+        message: 'Adding dish...',
+        duration: 5000,
+      });
+      await loading.present();
 
-    if (!perPieceControl || !perKgControl) {
-      console.error('Form controls for perPeacePrice or perKgPrice not found!');
-      return;
-    }
+      const formValue = this.form.value;
+      const dishData = {
+        hotelId: formValue.hotelId,
+        name: formValue.name,
+        description: formValue.description,
+        price: parseFloat(formValue.price),
+        categoryId: formValue.categoryId,
+      };
 
-    // Update field visibility and validators based on the selected value
-    if (value === '0') {
-      this.showPerPiecePrice = true;
-      this.showPerKgPrice = false;
-
-      perPieceControl.setValidators([Validators.required]);
-      perKgControl.clearValidators();
-    } else if (value === '1') {
-      this.showPerPiecePrice = false;
-      this.showPerKgPrice = true;
-
-      perPieceControl.clearValidators();
-      perKgControl.setValidators([Validators.required]);
-    } else if (value === '2') {
-      this.showPerPiecePrice = true;
-      this.showPerKgPrice = true;
-
-      perPieceControl.setValidators([Validators.required]);
-      perKgControl.setValidators([Validators.required]);
-    }
-
-    // Update the validity state of the controls
-    perPieceControl.updateValueAndValidity();
-    perKgControl.updateValueAndValidity();
-  }
-  async onSubmit(){
-    if(this.form.valid){
+      console.log('Submitting dish data:', dishData);
       
-      console.log(this.form.value);
-      this.auth.addService(this.form.value)
-      .subscribe({
-        next:(value:any) =>{
-          console.log(value);
-          this.serviceId = value['data']['_id'];
-          this.setOpen(true);
-        },
-        error:(error:HttpErrorResponse) =>{
-          console.log(error.error);
-          this.setOpen(false);
-        }
-      })
+      this.auth.addDish(dishData)
+        .subscribe({
+          next: async (value: any) => {
+            console.log('Dish added response:', value);
+            await loading.dismiss();
+            
+            // Get dish ID from response
+            if (value?.data?._id) {
+              this.dishId = value.data._id;
+              this.setOpen(true);
+            } else {
+              this.presentToast("Dish added but image upload unavailable", 2000, 'warning', 'bottom');
+              setTimeout(() => {
+                this.router.navigate(['products', 'view']);
+              }, 2000);
+            }
+          },
+          error: async (error: HttpErrorResponse) => {
+            console.error('Error adding dish:', error);
+            await loading.dismiss();
+            const errorMessage = error.error?.message || 'Failed to add dish. Please try again.';
+            this.presentToast(errorMessage, 3000, 'danger', 'bottom');
+            this.setOpen(false);
+          }
+        });
+    } else {
+      this.presentToast("Please fill all required fields", 2000, 'warning', 'bottom');
     }
   }
 

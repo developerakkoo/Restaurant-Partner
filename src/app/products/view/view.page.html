@@ -1,6 +1,6 @@
 <ion-header [translucent]="true" class="ion-no-border">
   <ion-toolbar>
-    <ion-title>All Services</ion-title>
+    <ion-title>All Dishes</ion-title>
     <ion-buttons slot="start">
       <ion-back-button defaultHref="tabs/tabs/tab1"></ion-back-button>
     </ion-buttons>
@@ -10,27 +10,44 @@
 <ion-content [fullscreen]="true">
   <ion-list>
     <ion-list-header>
-      <ion-label>All Services</ion-label>
+      <ion-label>All Dishes</ion-label>
     </ion-list-header>
 
-    <ion-item *ngFor="let item of services">
+    <ion-item *ngFor="let item of dishes">
       <ion-avatar slot="start">
-        <img crossorigin="anonymous" [src]="item.image_url" />
+        <img 
+          crossorigin="anonymous" 
+          [src]="item.image_url || item.image || 'assets/icon/dish-placeholder.png'" 
+          (error)="handleImageError($event)"
+        />
       </ion-avatar>
-      <ion-label> {{item?.name}} <span *ngIf="item?.type == 0">Press</span>
-        <span *ngIf="item?.type == 1">Washing</span>
-        <span *ngIf="item?.type == 2">
-        Dry Clean</span> 
-     <p *ngIf="item?.quantityAcceptedIn === 1 || item?.quantityAcceptedIn === 2 "> {{item?.perKgPrice|currency:"INR"}} /Kg</p>
-     <p *ngIf="item?.quantityAcceptedIn === 0 || item?.quantityAcceptedIn === 2"> {{item?.perPeacePrice|currency:"INR"}} /piece</p>
+      <ion-label>
+        <h2>{{item?.name}}</h2>
+        <p>{{item?.description}}</p>
+        <p><strong>{{item?.price | currency:'INR'}}</strong></p>
+        <p [class]="item.stock === 0 ? 'out-of-stock' : 'in-stock'">
+          <ion-badge [color]="item.stock === 0 ? 'danger' : 'success'">
+            {{item.stock === 0 ? 'Out of Stock' : 'In Stock'}}
+          </ion-badge>
+        </p>
       </ion-label>
-      <ion-button (click)="presentModalEditSerive(item)" fill="clear" slot="end">
+      <ion-toggle 
+        slot="end"
+        [checked]="item.stock === 1"
+        (ionChange)="toggleDishStock(item, $event)"
+      ></ion-toggle>
+      <!-- <ion-button (click)="presentModalEditDish(item)" fill="clear" slot="end">
         <ion-icon slot="icon-only" name="pencil-outline"></ion-icon>
       </ion-button>
-      <ion-button (click)="presentAlertConfirmDelete(item)" fill="clear" slot="end">
-
+      <ion-button (click)="presentAlertConfirmDelete(item)" fill="clear" slot="end" color="danger">
         <ion-icon slot="icon-only" name="trash-outline"></ion-icon>
-      </ion-button>
+      </ion-button> -->
+    </ion-item>
+
+    <ion-item *ngIf="dishes.length === 0">
+      <ion-label class="ion-text-center">
+        <p>No dishes found. Add your first dish!</p>
+      </ion-label>
     </ion-item>
   </ion-list>
 </ion-content>

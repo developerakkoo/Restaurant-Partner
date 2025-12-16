@@ -1,6 +1,6 @@
 <ion-header [translucent]="true" class="ion-no-border">
   <ion-toolbar>
-    <ion-title>Add Service</ion-title>
+    <ion-title>Add Dish</ion-title>
     <ion-buttons slot="start">
       <ion-back-button defaultHref="tabs/tabs/tab1"></ion-back-button>
     </ion-buttons>
@@ -8,61 +8,70 @@
 </ion-header>
 
 <ion-content [fullscreen]="true" class="ion-padding">
-   <form [formGroup]="form" (ngSubmit)="onSubmit()">
-    
+  <form [formGroup]="form" (ngSubmit)="onSubmit()">
     <ion-item>
       <ion-label>Category</ion-label>
-      <ion-select formControlName="categoryId"  multiple="false" placeholder="Select here" interface="popover">
+      <ion-select formControlName="categoryId" multiple="false" placeholder="Select category" interface="popover">
         <ion-select-option *ngFor="let cat of categories" [value]="cat._id">{{cat.name}}</ion-select-option>
       </ion-select>
     </ion-item>
 
     <br>
 
-    <ion-input formControlName="name" type="text" fill="outline" label="Service Name" labelPlacement="stacked" placeholder="Menu Name"></ion-input>
-<br>
-<ion-input formControlName="description" type="text" fill="outline" label="Service Description" labelPlacement="stacked" placeholder="Menu Name"></ion-input>
-<br>
+    <ion-input 
+      formControlName="name" 
+      type="text" 
+      fill="outline" 
+      label="Dish Name" 
+      labelPlacement="stacked" 
+      placeholder="Enter dish name">
+    </ion-input>
+    <br>
 
-  <ion-select formControlName="quantityAcceptedIn" (ionChange)="onQuantityChange($event)" fill="outline" value="0" multiple="false" label="Quantity Accepted In" labelPlacement="stacked">
-    <ion-select-option value="0">Per Piece</ion-select-option>
-    <ion-select-option value="1">Per Kg</ion-select-option>
-    <ion-select-option value="2">Both</ion-select-option>
-  </ion-select>
-<br>
-<ion-select formControlName="type" fill="outline" value="0" multiple="false" label="Type" labelPlacement="stacked">
-  <ion-select-option value="0">Press</ion-select-option>
-  <ion-select-option value="1">Washing</ion-select-option>
-  <ion-select-option value="2">Dry Clean</ion-select-option>
-</ion-select>
-<br>
-      <ion-input formControlName="perPeacePrice" *ngIf="showPerPiecePrice" type="text" fill="outline" label="Per Piece Price" labelPlacement="stacked" placeholder="Per Piece Price"></ion-input>
-<br> 
-     <ion-input formControlName="perKgPrice" type="text" fill="outline" *ngIf="showPerKgPrice" label="Per Kg Price" labelPlacement="stacked" placeholder="Per Kg Price"></ion-input>
-<br>
+    <ion-input 
+      formControlName="description" 
+      type="text" 
+      fill="outline" 
+      label="Description" 
+      labelPlacement="stacked" 
+      placeholder="Enter dish description">
+    </ion-input>
+    <br>
+
+    <ion-input 
+      formControlName="price" 
+      type="number" 
+      fill="outline" 
+      label="Price" 
+      labelPlacement="stacked" 
+      placeholder="Enter price"
+      min="0"
+      step="0.01">
+    </ion-input>
+    <br>
+
     <ion-button expand="block" color="primary" type="submit" [disabled]="form.invalid">
-      Add Service
+      Add Dish
     </ion-button>
-  </form> 
-
+  </form>
 
   <ion-modal [isOpen]="isDishImageUploadModalOpen" [initialBreakpoint]="0.75" [breakpoints]="[0, 0.25, 0.5, 0.75]">
     <ng-template>
       <ion-header class="ion-no-border">
         <ion-toolbar>
-          <ion-title>Upload a Service Image</ion-title>
+          <ion-title>Upload Dish Image</ion-title>
           <ion-buttons slot="end">
             <ion-button (click)="setOpen(false)">Close</ion-button>
           </ion-buttons>
         </ion-toolbar>
       </ion-header>
       <ion-content class="ion-padding">
-      <div class="image-upload-container">
-        <input #f hidden type="file" name="" (change)="uploadImage($event)" id="">
-        <ion-button (click)="f.click()" expand="block" fill="outline" shape="round">
-          Select and Upload Image
-        </ion-button>
-      </div>
+        <div class="image-upload-container">
+          <input #f hidden type="file" accept="image/*" (change)="uploadImage($event)" id="dishImageInput">
+          <ion-button (click)="f.click()" expand="block" fill="outline" shape="round">
+            Select and Upload Image
+          </ion-button>
+        </div>
       </ion-content>
     </ng-template>
   </ion-modal>
